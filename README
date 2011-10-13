@@ -1,3 +1,4 @@
+
 Many applications using Spring Security for authentication will need to:
 
     Ask users to sign up using a username and password.
