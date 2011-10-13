@@ -46,7 +46,28 @@
       <span class="small">by <a href="http://github.com/socialsignin">socialsignin</a></span></h1>
 
     <div class="description">
-      Desc
+    
+     Many applications using Spring Security for authentication will need to:
+<ul>
+    <li>Ask users to sign up using a username and password.</li>
+    <li>Create their own user details store and data access objects</li>
+    <li>Provide account management (eg. forgotten password functionality)</li>
+    <li>Provide access control for protected resources</li>
+</ul>
+
+For applications which already use spring-social to connect with external authenticated apis (eg. Facebook, Twitter) ,  
+SocialSignIn’s spring-social-security module removes these authentication concerns by delegating 
+authentication in Spring Security via spring-social to the third party api.
+
+Authenticating your website users via spring-social api providers means:
+<ul>
+    <li>No need for users to remember another password for another site.</li>
+    <li>No need for developers to create their own user details store, as the store used by spring-social is 
+    used instead.</li>
+    <li>No need for developers to provide account management as this is provided by the third party api.</li>
+    <li>No need for developers to provide access control for those resources which access an external api, as this is 
+    provided by the third party provider</li>
+</ul>
     </div>
 
     <p>Text</p><h2>Dependencies</h2>
@@ -56,9 +77,11 @@
 <h2>License</h2>
 <p>Licence</p>
 <h2>Authors</h2>
-<p>Michael Lavelle (michael@lavelle.name)<br/>      </p>
+<p>Michael Lavelle (michael@lavelle.name)
+<br/>      </p>
 <h2>Contact</h2>
-<p> (michael@socialsignin.org)<br/>      </p>
+<p> (michael@socialsignin.org)
+<br/>      </p>
 
 
     <h2>Download</h2>
