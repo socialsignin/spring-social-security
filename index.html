@@ -89,7 +89,7 @@ Authenticating your website users via spring-social api providers means:
 
  <p> and register springSocialSecurityAuthenticationFilter as a custom filter in place of FORM_LOGIN_FILTER.</p>
 
-<p>    <security:custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" /></p>
+<p>    &lt;security:custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" /&gt;</p>
 
 <p>Also configure the entry-point for your app's authentication to be the page from which users can login/connect
 with a Spring-Social provider (usually a page with a form submit to ProviderSignInController or ConnectController), 
