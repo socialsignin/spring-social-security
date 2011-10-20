@@ -5,7 +5,10 @@ Many applications using Spring Security for authentication will need to:
     Provide account management (eg. forgotten password functionality)
     Provide access control for protected resources
 
-For applications which already use spring-social to connect with external authenticated apis (eg. Facebook, Twitter) , SocialSignIn�s spring-social-security module removes these authentication concerns by delegating authentication in Spring Security via spring-social to the third party api. Authenticating your website users via spring-social api providers means:
+For applications which already use spring-social to connect with external authenticated apis (eg. Facebook, Twitter)
+,SocialSignIn's spring-social-security module removes these authentication concerns by delegating authentication
+in Spring Security via spring-social to the third party api. Authenticating your website users via spring-social api
+providers means:
 
     No need for users to remember another password for another site.
     No need for developers to create their own user details store, as the store used by spring-social is used instead.
@@ -20,11 +23,13 @@ The spring-social-security module includes:
 
     SpringSocialSecuritySignInService:  
 
-        Plugs into spring-social framework, passing third party authentication details to spring security via SpringSocialSecurityAuthenticationFilter
+        Plugs into spring-social framework, passing third party authentication details to spring security via 
+        SpringSocialSecurityAuthenticationFilter
 
     SpringSocialSecurityAuthenticationFilter : 
 
-        Plugs into spring-security framework, receives authentication details from third party using SpringSocialSecuritySignInService
+        Plugs into spring-security framework, receives authentication details from third party using 
+        SpringSocialSecuritySignInService
 
     SpringSocialSecurityConnectionSignUp :  
 
@@ -35,7 +40,7 @@ The spring-social-security module includes:
         Allows for explicit sign up, allowing users to choose a username for your site that is associated with their third party
 
 
-To delegate the authentication for your app to Spring-Social, a number of spring beans must be set up (detailed further down)
+To delegate the authentication for your app to Spring-Social, a number of spring beans must be set up.
 
 To use the default beans/implementations/configuration, simply component scan:
 
@@ -47,6 +52,15 @@ and register springSocialSecurityAuthenticationFilter as a custom filter in plac
 
 Also configure the entry-point for your app's authentication to be the page from which users can login/connect
 with a Spring-Social provider (usually a page with a form submit to ProviderSignInController or ConnectController)
+
+For example:
+
+<bean id="springSocialSecurityEntryPoint"
+  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+ <property name="loginFormUrl" value="/oauthlogin.jsp"/>
+</bean>
+
+<security:http use-expressions="true"  entry-point-ref="springSocialSecurityEntryPoint" ....
 
 As an alternative to component-scanning for the default implementations, you have the option to register your
 own beans/provide custom implementations.
