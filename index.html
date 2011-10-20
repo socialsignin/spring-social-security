@@ -97,12 +97,12 @@ and configure an environmental property for a page where user can choose a usern
 
 <p>For example:</p>
 
-<p><bean id="springSocialSecurityEntryPoint"
-  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
- <property name="loginFormUrl" value="/oauthlogin.jsp"/>
-</bean></p>
+<p>&lt;bean id="springSocialSecurityEntryPoint"
+  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"&gt;
+ &lt;property name="loginFormUrl" value="/oauthlogin.jsp"/&gt;
+&lt;/bean&gt;</p>
 
-<p><security:http use-expressions="true" entry-point-ref="springSocialSecurityEntryPoint" ....</p>
+<p>&lt;security:http use-expressions="true" entry-point-ref="springSocialSecurityEntryPoint" ....</p>
 
 <p>As an alternative to component-scanning for the default implementations, you have the option to register your
 own beans/provide custom implementations.</p>
