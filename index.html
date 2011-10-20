@@ -74,8 +74,62 @@ Authenticating your website users via spring-social api providers means:
     <!--
     <h2>Dependencies</h2>
 <p>Deps</p>
+-->
 <h2>Install</h2>
-<p>Install</p>
+
+<p>Build and install locally using mvn install</p>
+<p>Add spring-social-security as a dependency for your webapp</p>
+
+
+<p>To delegate the authentication for your app to Spring-Social, a number of spring beans must be set up.</p>
+
+<p>To use the default beans/implementations/configuration, simply component scan:</p>
+
+ <p>   <context:component-scan base-package="org.socialsignin.springframework.social.security" /></p>
+
+ <p> and register springSocialSecurityAuthenticationFilter as a custom filter in place of FORM_LOGIN_FILTER.</p>
+
+<p>    <security:custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" /></p>
+
+<p>Also configure the entry-point for your app's authentication to be the page from which users can login/connect
+with a Spring-Social provider (usually a page with a form submit to ProviderSignInController or ConnectController), 
+and configure an environmental property for a page where user can choose a username when creating an account.</p>
+
+<p>For example:</p>
+
+<p><bean id="springSocialSecurityEntryPoint"
+  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+ <property name="loginFormUrl" value="/oauthlogin.jsp"/>
+</bean></p>
+
+<p><security:http use-expressions="true" entry-point-ref="springSocialSecurityEntryPoint" ....</p>
+
+<p>As an alternative to component-scanning for the default implementations, you have the option to register your
+own beans/provide custom implementations.</p>
+
+<p>The classes which are registered as beans by default through component-scanning are:</p>
+<p><ul>
+<li>SpringSocialSecurityAuthenticationFilter (required)</li>
+
+<li>SpringSocialSecuritySignInService (required)</li>
+
+<li>SpringSocialSecurityUserDetailsService (required)</li>
+
+<li>SimpleUserAuthoritiesService (one implementation of UserAuthoritiesService is required)</li>
+
+<li>SpringSocialSecuritySignUpController (optional - for handling UI for creating new local accounts - alternative controllers could
+be used instead)</li>
+
+<li>SpringSocialSecurityConnectionSignUp (optional - for implictly creating new local accounts. If used, the SpringSocialSecurityJdbcUsersConnectionRepository
+must be used in place of standard JdbcUsersConnectionRepository to workaround and issue with JdbcUsersConnectionRepository
+not handling null return values from ConnectionSignUp's properly)</li>
+  
+  
+  </ul>
+  
+  
+</p>
+<!--
 <h2>License</h2>
 <p>Licence</p>
 -->
