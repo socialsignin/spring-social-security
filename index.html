@@ -93,7 +93,8 @@ Authenticating your website users via spring-social api providers means:
 
 <p>Also configure the entry-point for your app's authentication to be the page from which users can login/connect
 with a Spring-Social provider (usually a page with a form submit to ProviderSignInController or ConnectController), 
-and configure an environmental property for a page where user can choose a username when creating an account.</p>
+and configure an environmental property (socialsignin.signUpView) for a page where user can choose a username 
+when creating an account which posts a "userId" to the url "/signup" (handled by SpringSocialSecuritySignUpController)</p>
 
 <p>For example:</p>
 
