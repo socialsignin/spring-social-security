@@ -24,7 +24,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 /**
-* Simple implementation of UserAuthoritiesService, by default assigning each user the same role
+* Simple implementation of UserAuthoritiesService, by default assigning each user the same default role,
+* and a default role for each provider
 * @author Michael Lavelle
 */
 @Service
