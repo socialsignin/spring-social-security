@@ -23,7 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 /**
 * A service that provides the granted authorities for a given userId
 * Implemented by {@link SimpleUserAuthoritiesService}.
-* @author Michael Lavelle
+* @author Michael Lavelle 
 */
 public interface UserAuthoritiesService {
 

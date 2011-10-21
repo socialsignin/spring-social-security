@@ -60,7 +60,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 			boolean allowRepeatedAuthenticationAttempts) {
 		this.allowRepeatedAuthenticationAttempts = allowRepeatedAuthenticationAttempts;
 	}
-
+ 
 	@Autowired
 	private UserAuthoritiesService userAuthoritiesService;
 	

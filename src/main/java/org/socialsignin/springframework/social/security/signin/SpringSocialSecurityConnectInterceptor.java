@@ -41,7 +41,7 @@ public class SpringSocialSecurityConnectInterceptor<S> implements
 			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(AuthenticatedUserIdHolder.getAuthenticatedUserId(), null,newAuthorities);		
 			SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 		}
-	}
+	} 
 
 	@Override
 	public void preConnect(ConnectionFactory<S> arg0,

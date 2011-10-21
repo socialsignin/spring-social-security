@@ -51,7 +51,7 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 
 		}
 		return grantedAuthorities;
-
+ 
 	}
 	
 	@Override
