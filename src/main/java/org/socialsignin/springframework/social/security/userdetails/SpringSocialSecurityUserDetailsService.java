@@ -16,7 +16,9 @@
 package org.socialsignin.springframework.social.security.userdetails;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,7 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 			throws UsernameNotFoundException {
 		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userName);
 		MultiValueMap<String,Connection<?>> connections = connectionRepository.findAllConnections();
-		
+		Set<String> allProviders = new HashSet<String>();
 		List<Connection<?>> allConnections = new ArrayList<Connection<?>>();
 		if (connections.size() > 0)
 		{
@@ -66,11 +68,15 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 				for (Connection<?> connection : connectionList)
 				{
 					allConnections.add(connection);
+					if(!allProviders.contains(connection.getKey().getProviderId()))
+					{
+						allProviders.add(connection.getKey().getProviderId());
+					}
 				}
 			}
 			if (allConnections.size() > 0)
 			{
-				return new User(userName,null,true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(userName));
+				return new User(userName,"",true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allProviders,userName));
 			}
 			else
 			{

@@ -17,6 +17,7 @@ package org.socialsignin.springframework.social.security.userauthorities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,20 +32,37 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 
 	private String defaultAuthorityName = "ROLE_USER";
 	
+	public String getDefaultProviderAuthorityName(String providerId)
+	{
+		return defaultAuthorityName + "_" + providerId.toUpperCase();
+	}
+	
 	public void setDefaultAuthorityName(String defaultAuthorityName) {
 		this.defaultAuthorityName = defaultAuthorityName;
 	}
 
-	protected List<GrantedAuthority> getDefaultAuthorities()
+	protected List<GrantedAuthority> getDefaultAuthorities(Set<String> providerIds)
 	{
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(defaultAuthorityName));
+		for (String providerId : providerIds)
+		{
+			grantedAuthorities.add(getProviderAuthority(providerId));
+
+		}
 		return grantedAuthorities;
+
 	}
 	
 	@Override
-	public List<GrantedAuthority> getAuthoritiesForUser(String userId) {
-		return getDefaultAuthorities();
+	public List<GrantedAuthority> getAuthoritiesForUser(Set<String> providerIds,String userId) {
+		return getDefaultAuthorities(providerIds);
+	}
+
+	@Override
+	public GrantedAuthority getProviderAuthority(
+			String providerId) {
+		return new SimpleGrantedAuthority(getDefaultProviderAuthorityName(providerId));
 	}
 
 }

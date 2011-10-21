@@ -16,6 +16,7 @@
 package org.socialsignin.springframework.social.security.userauthorities;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -26,6 +27,7 @@ import org.springframework.security.core.GrantedAuthority;
 */
 public interface UserAuthoritiesService {
 
-	public List<GrantedAuthority> getAuthoritiesForUser(String userId);
-	
+	public List<GrantedAuthority> getAuthoritiesForUser(Set<String> providerIds,String userId);
+	public GrantedAuthority getProviderAuthority(String providerId);
+
 }

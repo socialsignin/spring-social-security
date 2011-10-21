@@ -16,11 +16,14 @@
 package org.socialsignin.springframework.social.security.signin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,10 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.stereotype.Component;
 
@@ -49,8 +56,17 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 	
 	private boolean allowRepeatedAuthenticationAttempts = false;
 	
+	public void setAllowRepeatedAuthenticationAttempts(
+			boolean allowRepeatedAuthenticationAttempts) {
+		this.allowRepeatedAuthenticationAttempts = allowRepeatedAuthenticationAttempts;
+	}
+
 	@Autowired
 	private UserAuthoritiesService userAuthoritiesService;
+	
+	@Autowired
+	@Qualifier("springSocialSecurityUserDetailsService")
+	private UserDetailsService userDetailsService;
 	
 	
 	public void setRemoveSignInDetailsFromSessionOnSuccessfulAuthentication(
@@ -83,15 +99,23 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 		String alreadyAuthenticatedUserId = AuthenticatedUserIdHolder.getAuthenticatedUserId();
 		if (signInDetails != null)
 		{		
+			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+			UserDetails user = userDetailsService.loadUserByUsername(signInDetails.getUserId());
+			authorities.addAll(user.getAuthorities());
+			GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(signInDetails.getConnection().getKey().getProviderId());
+			if (authorities.contains(newAuthority))
+			{
+				authorities.add(newAuthority);		
+			}
 			if (removeSignInDetailsFromSessionOnSuccessfulAuthentication)
 			{
 				request.getSession().removeAttribute(SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
 			}
-			return new UsernamePasswordAuthenticationToken(signInDetails.getUserId(), null, userAuthoritiesService.getAuthoritiesForUser(signInDetails.getUserId()));
+			return new UsernamePasswordAuthenticationToken(signInDetails.getUserId(), null,authorities);
 		}
 		else if (allowRepeatedAuthenticationAttempts && alreadyAuthenticatedUserId != null)
 		{
-			return new UsernamePasswordAuthenticationToken(alreadyAuthenticatedUserId , null, userAuthoritiesService.getAuthoritiesForUser(alreadyAuthenticatedUserId));
+			return SecurityContextHolder.getContext().getAuthentication();
 		}
 		else
 		{
