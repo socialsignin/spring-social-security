@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,22 +34,22 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 
 	private String defaultAuthorityName = "ROLE_USER";
 	
-	public String getDefaultProviderAuthorityName(String providerId)
+	public String getDefaultProviderAuthorityName(ConnectionKey connectionKey)
 	{
-		return defaultAuthorityName + "_" + providerId.toUpperCase();
+		return defaultAuthorityName + "_" + connectionKey.getProviderId().toUpperCase();
 	}
 	
 	public void setDefaultAuthorityName(String defaultAuthorityName) {
 		this.defaultAuthorityName = defaultAuthorityName;
 	}
 
-	protected List<GrantedAuthority> getDefaultAuthorities(Set<String> providerIds)
+	protected List<GrantedAuthority> getDefaultAuthorities(Set<ConnectionKey> connectionKeys)
 	{
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(defaultAuthorityName));
-		for (String providerId : providerIds)
+		for (ConnectionKey connectionKey : connectionKeys)
 		{
-			grantedAuthorities.add(getProviderAuthority(providerId));
+			grantedAuthorities.add(getProviderAuthority(connectionKey));
 
 		}
 		return grantedAuthorities;
@@ -56,14 +57,13 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 	}
 	
 	@Override
-	public List<GrantedAuthority> getAuthoritiesForUser(Set<String> providerIds,String userId) {
-		return getDefaultAuthorities(providerIds);
+	public List<GrantedAuthority> getAuthoritiesForUser(Set<ConnectionKey> connectionKeys,String userId) {
+		return getDefaultAuthorities(connectionKeys);
 	}
 
 	@Override
-	public GrantedAuthority getProviderAuthority(
-			String providerId) {
-		return new SimpleGrantedAuthority(getDefaultProviderAuthorityName(providerId));
+	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey) {
+		return new SimpleGrantedAuthority(getDefaultProviderAuthorityName(connectionKey));
 	}
 
 }

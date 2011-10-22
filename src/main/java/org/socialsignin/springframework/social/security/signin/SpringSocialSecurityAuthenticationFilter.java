@@ -102,7 +102,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			UserDetails user = userDetailsService.loadUserByUsername(signInDetails.getUserId());
 			authorities.addAll(user.getAuthorities());
-			GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(signInDetails.getConnection().getKey().getProviderId());
+			GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(signInDetails.getConnection().getKey());
 			if (authorities.contains(newAuthority))
 			{
 				authorities.add(newAuthority);		

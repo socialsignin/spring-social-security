@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Repository;
@@ -59,7 +60,7 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 			throws UsernameNotFoundException {
 		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userName);
 		MultiValueMap<String,Connection<?>> connections = connectionRepository.findAllConnections();
-		Set<String> allProviders = new HashSet<String>();
+		Set<ConnectionKey> allConnectionKeys = new HashSet<ConnectionKey>();
 		List<Connection<?>> allConnections = new ArrayList<Connection<?>>();
 		if (connections.size() > 0)
 		{
@@ -68,15 +69,15 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 				for (Connection<?> connection : connectionList)
 				{
 					allConnections.add(connection);
-					if(!allProviders.contains(connection.getKey().getProviderId()))
+					if(!allConnectionKeys.contains(connection.getKey()))
 					{
-						allProviders.add(connection.getKey().getProviderId());
+						allConnectionKeys.add(connection.getKey());
 					}
 				}
 			}
 			if (allConnections.size() > 0)
 			{
-				return new User(userName,"",true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allProviders,userName));
+				return new User(userName,"",true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allConnectionKeys,userName));
 			}
 			else
 			{

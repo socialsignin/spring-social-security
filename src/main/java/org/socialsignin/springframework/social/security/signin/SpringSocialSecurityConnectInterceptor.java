@@ -47,7 +47,7 @@ public class SpringSocialSecurityConnectInterceptor<S> implements
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Collection<? extends GrantedAuthority> existingAuthorities = authentication.getAuthorities();
-		GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(connection.getKey().getProviderId());
+		GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(connection.getKey());
 
 		if (!existingAuthorities.contains(newAuthority))
 		{
