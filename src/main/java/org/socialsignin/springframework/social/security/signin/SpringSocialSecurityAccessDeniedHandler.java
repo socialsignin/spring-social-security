@@ -17,8 +17,7 @@ public class SpringSocialSecurityAccessDeniedHandler implements
 	@Override
 	public void handle(HttpServletRequest arg0, HttpServletResponse arg1,
 			AccessDeniedException arg2) throws IOException, ServletException {
-		
-		System.out.println("Access Denied:" + arg2);
+			// TODO
 	}
 
 }

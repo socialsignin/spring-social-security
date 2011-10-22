@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.connect.ConnectionKey;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 * @author Michael Lavelle
 */
 @Service
+@Qualifier("userAuthoritiesService")
 public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 
 	private String defaultAuthorityName = "ROLE_USER";

@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +41,7 @@ public class SpringSocialSecurityConnectInterceptor<S> implements
 		ConnectInterceptor<S> {
 	
 	@Autowired
+	@Qualifier("userAuthoritiesService")
 	private UserAuthoritiesService userAuthoritiesService;
 	
 	@Override

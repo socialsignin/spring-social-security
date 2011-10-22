@@ -62,6 +62,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 	}
  
 	@Autowired
+	@Qualifier("userAuthoritiesService")
 	private UserAuthoritiesService userAuthoritiesService;
 	
 	@Autowired
