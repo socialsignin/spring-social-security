@@ -25,6 +25,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.socialsignin.springframework.social.security.signin.AuthenticatedUserIdHolder;
+import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInDetails;
+import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInService;
 import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -104,7 +107,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 			UserDetails user = userDetailsService.loadUserByUsername(signInDetails.getUserId());
 			authorities.addAll(user.getAuthorities());
 			GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(signInDetails.getConnection().getKey());
-			if (authorities.contains(newAuthority))
+			if (!authorities.contains(newAuthority))
 			{
 				authorities.add(newAuthority);		
 			}
