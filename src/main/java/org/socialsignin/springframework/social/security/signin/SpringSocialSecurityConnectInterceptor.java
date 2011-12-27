@@ -37,7 +37,7 @@ import org.springframework.web.context.request.WebRequest;
 /**
 * @author Michael Lavelle
 */
-public class SpringSocialSecurityConnectInterceptor<S> implements
+public class SpringSocialSecurityConnectInterceptor<S> extends EnsureUniqueConnectInterceptor<S> implements
 		ConnectInterceptor<S> {
 	
 	@Autowired
@@ -46,6 +46,8 @@ public class SpringSocialSecurityConnectInterceptor<S> implements
 	
 	@Override
 	public void postConnect(Connection<S> connection, WebRequest webRequest) {
+		
+		super.postConnect(connection, webRequest);
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Collection<? extends GrantedAuthority> existingAuthorities = authentication.getAuthorities();
