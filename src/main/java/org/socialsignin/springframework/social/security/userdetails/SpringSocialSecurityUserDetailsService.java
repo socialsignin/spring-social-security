@@ -16,10 +16,13 @@
 package org.socialsignin.springframework.social.security.userdetails;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import org.socialsignin.springframework.social.security.signin.SpringSocialSecurityPasswordBuilder;
 import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -62,6 +66,7 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 		MultiValueMap<String,Connection<?>> connections = connectionRepository.findAllConnections();
 		Set<ConnectionKey> allConnectionKeys = new HashSet<ConnectionKey>();
 		List<Connection<?>> allConnections = new ArrayList<Connection<?>>();
+		List<ConnectionData> allConnectionData = new ArrayList<ConnectionData>();
 		if (connections.size() > 0)
 		{
 			for (List<Connection<?>> connectionList : connections.values())
@@ -73,11 +78,14 @@ public class SpringSocialSecurityUserDetailsService implements UserDetailsServic
 					{
 						allConnectionKeys.add(connection.getKey());
 					}
+					ConnectionData connectionData = connection.createData();
+					allConnectionData.add(connectionData);
+					
 				}
 			}
 			if (allConnections.size() > 0)
 			{
-				return new User(userName,"",true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allConnectionKeys,userName));
+				return new User(userName,new SpringSocialSecurityPasswordBuilder(allConnectionData).build(),true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allConnectionKeys,userName));
 			}
 			else
 			{

@@ -28,10 +28,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 /**
@@ -44,6 +47,9 @@ public class SpringSocialSecurityConnectInterceptor<S> extends EnsureUniqueConne
 	@Qualifier("userAuthoritiesService")
 	private UserAuthoritiesService userAuthoritiesService;
 	
+	@Autowired(required=false)
+	private RememberMeServices rememberMeServices;
+
 	@Override
 	public void postConnect(Connection<S> connection, WebRequest webRequest) {
 		
@@ -52,7 +58,7 @@ public class SpringSocialSecurityConnectInterceptor<S> extends EnsureUniqueConne
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Collection<? extends GrantedAuthority> existingAuthorities = authentication.getAuthorities();
 		GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(connection.getKey());
-
+		
 		if (!existingAuthorities.contains(newAuthority))
 		{
 			Set<String> providerIds =new HashSet<String>();
@@ -60,8 +66,13 @@ public class SpringSocialSecurityConnectInterceptor<S> extends EnsureUniqueConne
 			List<GrantedAuthority> newAuthorities = new ArrayList<GrantedAuthority>();
 			newAuthorities.add(newAuthority);
 			newAuthorities.addAll(existingAuthorities);
-			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(AuthenticatedUserIdHolder.getAuthenticatedUserId(), null,newAuthorities);		
+			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(authentication.getName(), new SpringSocialSecurityPasswordBuilder((String)authentication.getCredentials(),connection.createData()).build(),newAuthorities);		
 			SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+			if (rememberMeServices != null && webRequest instanceof ServletWebRequest)
+			{
+				ServletWebRequest servletWebRequest = ((ServletWebRequest)webRequest);
+				rememberMeServices.loginSuccess(servletWebRequest.getRequest(), servletWebRequest.getResponse(), newAuthentication);
+			}
 		}
 	} 
 

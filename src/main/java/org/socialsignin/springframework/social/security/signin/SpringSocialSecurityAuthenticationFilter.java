@@ -41,6 +41,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.stereotype.Component;
 
 /**
@@ -64,6 +65,12 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 		this.allowRepeatedAuthenticationAttempts = allowRepeatedAuthenticationAttempts;
 	}
  
+	@Override
+	@Autowired(required=false)
+	public void setRememberMeServices(RememberMeServices rememberMeServices) {
+		super.setRememberMeServices(rememberMeServices);
+	}
+
 	@Autowired
 	@Qualifier("userAuthoritiesService")
 	private UserAuthoritiesService userAuthoritiesService;
@@ -101,6 +108,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 		
 		SpringSocialSecuritySignInDetails signInDetails = (SpringSocialSecuritySignInDetails)request.getSession().getAttribute(SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
 		String alreadyAuthenticatedUserId = AuthenticatedUserIdHolder.getAuthenticatedUserId();
+
 		if (signInDetails != null)
 		{		
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
@@ -115,7 +123,7 @@ public class SpringSocialSecurityAuthenticationFilter extends AbstractAuthentica
 			{
 				request.getSession().removeAttribute(SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
 			}
-			return new UsernamePasswordAuthenticationToken(signInDetails.getUserId(), null,authorities);
+			return new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword(),authorities);
 		}
 		else if (allowRepeatedAuthenticationAttempts && alreadyAuthenticatedUserId != null)
 		{
