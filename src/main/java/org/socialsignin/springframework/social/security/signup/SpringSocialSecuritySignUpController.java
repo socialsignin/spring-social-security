@@ -97,6 +97,7 @@ public class SpringSocialSecuritySignUpController {
 			// TODO Error messages
 			return false;
 		}
+
 		ProviderSignInUtils.handlePostSignUp(userName, request);
 		return true;
 	}
@@ -105,11 +106,11 @@ public class SpringSocialSecuritySignUpController {
 	@RequestMapping(value="",method=RequestMethod.POST)
 	public String signUpSubmit(ServletWebRequest request,@ModelAttribute("signUpForm") SignUpForm signUpForm)
 	{
+		Connection<?> connection = ProviderSignInUtils.getConnection(request);	
 		if (!signUpUser(request,signUpForm.getUserName()))
 		{
 			return signUpView;
 		}
-		Connection<?> connection = ProviderSignInUtils.getConnection(request);	
 		springSocialSecuritySignInService.signIn(signUpForm.getUserName(), connection, request);
 		return "redirect:/authenticate";	
 
