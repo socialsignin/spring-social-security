@@ -15,6 +15,9 @@
  */
 package org.socialsignin.springframework.social.security.signup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +26,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,30 +54,64 @@ public class SpringSocialSecuritySignUpController {
 	private UserDetailsService springSocialSecurityUserDetailsService;
 	
 	@RequestMapping(value="",method=RequestMethod.GET)
-	public ModelAndView signUpForm(ServletWebRequest request)
+	public String signUpForm(@ModelAttribute("signUpForm") SignUpForm signUpForm)
+	{
+		return signUpView;
+	}
+	
+	@ModelAttribute("signUpForm")
+	public SignUpForm createForm(ServletWebRequest request)
 	{
 		Connection<?> connection = ProviderSignInUtils.getConnection(request);
-		return new ModelAndView(signUpView,"connectionData",connection.createData());
+		SignUpForm signUpForm = new SignUpForm();
+		if (connection != null)
+		{
+			String thirdPartyUserName = connection.fetchUserProfile().getUsername();
+			if (thirdPartyUserName != null && !isUserNameTaken(thirdPartyUserName))
+			{
+				signUpForm.setUserName(thirdPartyUserName);
+			}
+		}
+		return signUpForm;
+	}
+	
+
+	@Transactional(readOnly=true)
+	private boolean isUserNameTaken(String userName)
+	{
+		try
+		{
+			return springSocialSecurityUserDetailsService.loadUserByUsername(userName) != null;
+		}
+		catch (UsernameNotFoundException e)
+		{
+			return false;
+		}
+	}
+	
+	@Transactional(readOnly=false)
+	private boolean signUpUser(ServletWebRequest request,String userName)
+	{
+		if (isUserNameTaken(userName))
+		{
+			// TODO Error messages
+			return false;
+		}
+		ProviderSignInUtils.handlePostSignUp(userName, request);
+		return true;
 	}
 	
 	
 	@RequestMapping(value="",method=RequestMethod.POST)
-	public String signUpSubmit(ServletWebRequest request,@RequestParam("userId") String userId)
+	public String signUpSubmit(ServletWebRequest request,@ModelAttribute("signUpForm") SignUpForm signUpForm)
 	{
-		try
+		if (!signUpUser(request,signUpForm.getUserName()))
 		{
-			springSocialSecurityUserDetailsService.loadUserByUsername(userId);
-			// TODO Error messages
 			return signUpView;
 		}
-		catch (UsernameNotFoundException e)
-		{
-
-			Connection<?> connection = ProviderSignInUtils.getConnection(request);
-			ProviderSignInUtils.handlePostSignUp(userId, request);
-			springSocialSecuritySignInService.signIn(userId, connection, request);
-			return "redirect:/authenticate";
-		}
+		Connection<?> connection = ProviderSignInUtils.getConnection(request);	
+		springSocialSecuritySignInService.signIn(signUpForm.getUserName(), connection, request);
+		return "redirect:/authenticate";	
 
 	}
 	
