@@ -53,7 +53,9 @@ public class EnsureUniqueConnectInterceptor<S> implements ConnectInterceptor<S> 
 			if (connectionAlreadyAssociatedWithAnotherUser)
 			{
 				connectionRepository.removeConnection(connection.getKey());
-				throw new NonUniqueConnectionException("The connection is already associated with a different account");
+				NonUniqueConnectionException nonUniqueConnectionException = new NonUniqueConnectionException("The connection is already associated with a different account");
+				request.setAttribute("lastSessionException", nonUniqueConnectionException, WebRequest.SCOPE_SESSION);
+				throw nonUniqueConnectionException;
 			}
 		
 	}
