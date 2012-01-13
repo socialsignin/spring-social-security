@@ -27,6 +27,9 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -90,11 +93,11 @@ public class SpringSocialSecuritySignUpController {
 	}
 	
 	@Transactional(readOnly=false)
-	private boolean signUpUser(ServletWebRequest request,String userName)
+	private boolean signUpUser(ServletWebRequest request,String userName,BindingResult errors)
 	{
 		if (isUserNameTaken(userName))
 		{
-			// TODO Error messages
+			errors.addError(new FieldError("signUpForm","userName","Sorry, the username '" + userName + "' is not available"));
 			return false;
 		}
 
@@ -104,10 +107,11 @@ public class SpringSocialSecuritySignUpController {
 	
 	
 	@RequestMapping(value="",method=RequestMethod.POST)
-	public String signUpSubmit(ServletWebRequest request,@ModelAttribute("signUpForm") SignUpForm signUpForm)
+	public String signUpSubmit(ServletWebRequest request,@ModelAttribute("signUpForm") SignUpForm signUpForm,BindingResult result)
 	{
 		Connection<?> connection = ProviderSignInUtils.getConnection(request);	
-		if (!signUpUser(request,signUpForm.getUserName()))
+		signUpUser(request,signUpForm.getUserName(),result);
+		if (result.hasErrors())
 		{
 			return signUpView;
 		}
