@@ -92,9 +92,27 @@ public class SpringSocialSecuritySignUpController {
 		}
 	}
 	
+	private boolean isUserNameValid(String userName,BindingResult errors)
+	{
+		if (userName == null || userName.trim().length() == 0)
+		{
+			errors.addError(new FieldError("signUpForm","userName","Please choose a username"));
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	
 	@Transactional(readOnly=false)
 	private boolean signUpUser(ServletWebRequest request,String userName,BindingResult errors)
 	{
+		if (!isUserNameValid(userName,errors))
+		{
+			return false;
+		}
 		if (isUserNameTaken(userName))
 		{
 			errors.addError(new FieldError("signUpForm","userName","Sorry, the username '" + userName + "' is not available"));
