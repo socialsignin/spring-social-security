@@ -75,8 +75,8 @@ public class ProviderSignInOrConnectController {
 	* @see ProviderSignInUtils
 	*/
 	@RequestMapping(value="/{providerId}", method=RequestMethod.GET, params="oauth_token")
-	public String oauth1Callback(@PathVariable String providerId, NativeWebRequest request,@RequestParam("oauth_token") String oauthToken) {
-		return "redirect:" + getRedirectPath() + "/" + providerId + "?oauth_token=" + oauthToken;
+	public String oauth1Callback(@PathVariable String providerId, NativeWebRequest request,@RequestParam("oauth_token") String oauthToken,@RequestParam(value="oauth_verifier",required=false) String oauthVerifier) {
+		return "redirect:" + getRedirectPath() + "/" + providerId + "?oauth_token=" + oauthToken + (oauthVerifier == null ? "" : ("&oauth_verifier=" + oauthVerifier));
 	}
 
 	/**
