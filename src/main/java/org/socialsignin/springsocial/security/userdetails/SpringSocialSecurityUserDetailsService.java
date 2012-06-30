@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.socialsignin.springframework.social.security.userdetails;
+package org.socialsignin.springsocial.security.userdetails;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.socialsignin.springframework.social.security.signin.SpringSocialSecurityPasswordBuilder;
-import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
+import org.socialsignin.springsocial.security.signin.SpringSocialSecurityPasswordBuilder;
+import org.socialsignin.springsocial.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;

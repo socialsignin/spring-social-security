@@ -1,4 +1,4 @@
-package org.socialsignin.springframework.social.security.signup;
+package org.socialsignin.springsocial.security.signup;
 
 public class SignUpForm {
 	

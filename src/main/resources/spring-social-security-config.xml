@@ -28,25 +28,19 @@
         http://www.springframework.org/schema/task 
         http://www.springframework.org/schema/task/spring-task-3.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security-3.1.xsd
         http://www.springframework.org/schema/data/jpa
    	    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
       
- <!-- 
-<security:authentication-manager alias="authenticationManager" >
-  <security:authentication-provider user-service-ref="springSocialSecurityUserDetailsService">
-  </security:authentication-provider>
-  </security:authentication-manager>
-   --> 
      
-<bean id="springSocialSecurityEntryPoint"
-  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
- <property name="loginFormUrl" value="/oauthlogin.jsp"/>
-</bean>
+	<bean id="springSocialSecurityEntryPoint"
+  		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+ 		<property name="loginFormUrl" value="/oauthlogin.jsp"/>
+	</bean>
 
 
 </beans>

@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.socialsignin.springframework.social.security.signin;
+package org.socialsignin.springsocial.security.userauthorities;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.List;
+import java.util.Set;
 
-public class AuthenticatedUserIdHolder {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.social.connect.ConnectionKey;
 
-	public static String getAuthenticatedUserId()
-	{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth == null || auth.getName().equals("anonymousUser") ? null :auth.getName();
-	}
-	
+/**
+* A service that provides the granted authorities for a given userId
+* Implemented by {@link SimpleUserAuthoritiesService}.
+* @author Michael Lavelle 
+*/
+public interface UserAuthoritiesService {
+
+	public List<GrantedAuthority> getAuthoritiesForUser(Set<ConnectionKey> providerIds,String userId);
+	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey);
+
 }

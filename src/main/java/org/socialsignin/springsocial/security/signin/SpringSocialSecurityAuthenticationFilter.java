@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.socialsignin.springframework.social.security.signin;
+package org.socialsignin.springsocial.security.signin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,10 +25,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.socialsignin.springframework.social.security.signin.AuthenticatedUserIdHolder;
-import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInDetails;
-import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInService;
-import org.socialsignin.springframework.social.security.userauthorities.UserAuthoritiesService;
+import org.socialsignin.springsocial.security.signin.AuthenticatedUserIdHolder;
+import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInDetails;
+import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInService;
+import org.socialsignin.springsocial.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;

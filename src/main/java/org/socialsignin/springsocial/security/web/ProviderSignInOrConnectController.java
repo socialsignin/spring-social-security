@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.socialsignin.springframework.social.security.web;
+package org.socialsignin.springsocial.security.web;
 
-import org.socialsignin.springframework.social.security.signin.AuthenticatedUserIdHolder;
+import org.socialsignin.springsocial.security.signin.AuthenticatedUserIdHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.ConnectController;
 import org.springframework.stereotype.Controller;

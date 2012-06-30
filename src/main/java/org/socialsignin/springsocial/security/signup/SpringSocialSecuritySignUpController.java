@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.socialsignin.springframework.social.security.signup;
+package org.socialsignin.springsocial.security.signup;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.socialsignin.springframework.social.security.signin.SpringSocialSecuritySignInService;
+import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
