@@ -50,7 +50,7 @@ To delegate the authentication for your app to Spring-Social, a number of spring
 
 To use the default beans/implementations/configuration, simply component scan:
 
-    <context:component-scan base-package="org.socialsignin.springframework.social.security" />
+    <context:component-scan base-package="org.socialsignin.springsocial.security" />
 
 and register springSocialSecurityAuthenticationFilter as a custom filter in place of FORM_LOGIN_FILTER.
 
