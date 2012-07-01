@@ -87,7 +87,5 @@ SimpleUserAuthoritiesService (one implementation of UserAuthoritiesService is re
 SpringSocialSecuritySignUpController (optional - for handling UI for creating new local accounts - alternative controllers could
 be used instead)
 
-SpringSocialSecurityConnectionSignUp (optional - for implictly creating new local accounts.  If used, the SpringSocialSecurityJdbcUsersConnectionRepository
-must be used in place of standard JdbcUsersConnectionRepository to workaround and issue with JdbcUsersConnectionRepository
-not handling null return values from ConnectionSignUp's properly)
+SpringSocialSecurityConnectionSignUp (optional - for implictly creating new local accounts.)
 
