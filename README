@@ -2,6 +2,11 @@ For a simple "Hello World" app demonstrating spring-social-security see:
 
 https://github.com/socialsignin/spring-social-security-demo
 
+NB: For users upgrading from 1.0.1 to 1.0.2 : This version now requires new entries to exist in the 
+UsersConnectionRepository for a "springSocialSecurity" provider.  One entry is required for each existing
+user.  To upgrade your database, please see the notes if you have been previously using spring-social-security,
+please see the notes at the bottom of this readme.
+
 About Spring-Social-Security:
 
 Many applications using Spring Security for authentication will need to:
@@ -88,4 +93,16 @@ SpringSocialSecuritySignUpController (optional - for handling UI for creating ne
 be used instead)
 
 SpringSocialSecurityConnectionSignUp (optional - for implictly creating new local accounts.)
+
+
+
+NB:  For users upgrading from 1.0.1 to 1.0.2.  The application will create the required entries in UsersConnectionRepository
+for users registering using 1.0.2, however to migrate your repository so that existing users who registered with 1.0.2 can login,
+you can run the following sql:
+
+insert into UserConnection (select userId,'springSocialSecurity',userId,1,null,null,null,MD5(RAND()),null,
+null,null from (select distinct userId from UserConnection) springSocialSecurityProfiles);
+
+This statement ensures that there is an entry in UsersConnectionRepository for each local user, with a random password generated.
+
 
