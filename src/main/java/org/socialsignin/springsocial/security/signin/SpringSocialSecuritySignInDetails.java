@@ -18,7 +18,7 @@ package org.socialsignin.springsocial.security.signin;
 import org.springframework.social.connect.ConnectionData;
 
 /**
- * POJO for holding userid and connection, set in session by
+ * POJO for holding userid and connectiondata, set in session by
  * SpringSocialSecuritySignInService and retrieved from session in
  * SpringSocialSecurityAuthenticationFilter
  * 

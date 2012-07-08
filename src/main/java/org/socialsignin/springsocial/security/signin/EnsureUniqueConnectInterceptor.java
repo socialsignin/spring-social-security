@@ -24,6 +24,9 @@ import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * @author Michael Lavelle
+ */
 public class EnsureUniqueConnectInterceptor<S> implements ConnectInterceptor<S> {
 
 	@Autowired

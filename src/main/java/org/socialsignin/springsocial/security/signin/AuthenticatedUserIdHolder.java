@@ -18,6 +18,9 @@ package org.socialsignin.springsocial.security.signin;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * @author Michael Lavelle
+ */
 public class AuthenticatedUserIdHolder {
 
 	public static String getAuthenticatedUserId() {
