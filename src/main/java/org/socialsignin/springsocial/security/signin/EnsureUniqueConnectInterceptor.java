@@ -15,10 +15,7 @@
  */
 package org.socialsignin.springsocial.security.signin;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionRepository;
@@ -31,33 +28,30 @@ public class EnsureUniqueConnectInterceptor<S> implements ConnectInterceptor<S> 
 
 	@Autowired
 	private UsersConnectionRepository usersConnectionRepository;
-	
+
 	@Autowired
 	private ConnectionRepository connectionRepository;
-	
-	
-	
+
 	@Override
 	public void preConnect(ConnectionFactory<S> connectionFactory,
-			MultiValueMap<String, String> parameters, WebRequest request) 
-	{
-		
-		
+			MultiValueMap<String, String> parameters, WebRequest request) {
+
 	}
 
 	@Override
 	public void postConnect(Connection<S> connection, WebRequest request) {
-		
-		boolean connectionAlreadyAssociatedWithAnotherUser = 
-			usersConnectionRepository.findUserIdsWithConnection(connection).size() >1;
-			if (connectionAlreadyAssociatedWithAnotherUser)
-			{
-				connectionRepository.removeConnection(connection.getKey());
-				NonUniqueConnectionException nonUniqueConnectionException = new NonUniqueConnectionException("The connection is already associated with a different account");
-				request.setAttribute("lastSessionException", nonUniqueConnectionException, WebRequest.SCOPE_SESSION);
-				throw nonUniqueConnectionException;
-			}
-		
+
+		boolean connectionAlreadyAssociatedWithAnotherUser = usersConnectionRepository
+				.findUserIdsWithConnection(connection).size() > 1;
+		if (connectionAlreadyAssociatedWithAnotherUser) {
+			connectionRepository.removeConnection(connection.getKey());
+			NonUniqueConnectionException nonUniqueConnectionException = new NonUniqueConnectionException(
+					"The connection is already associated with a different account");
+			request.setAttribute("lastSessionException",
+					nonUniqueConnectionException, WebRequest.SCOPE_SESSION);
+			throw nonUniqueConnectionException;
+		}
+
 	}
 
 }

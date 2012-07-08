@@ -16,23 +16,20 @@
 package org.socialsignin.springsocial.security.userdetails;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
-import org.socialsignin.springsocial.security.signin.SpringSocialSecurityPasswordBuilder;
-import org.socialsignin.springsocial.security.userauthorities.UserAuthoritiesService;
+import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
+import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
+import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFactory;
+import org.socialsignin.springsocial.security.signup.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionData;
-import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Repository;
@@ -41,68 +38,81 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 
 /**
-UserDetailsService for SpringSocialSecurity - retrieves user details from Spring Social
-connection repository
-
-* @author Michael Lavelle
-*/
+ * UserDetailsService for SpringSocialSecurity - retrieves user details from
+ * Spring Social connection repository
+ * 
+ * @author Michael Lavelle
+ */
 @Repository
 @Service
 @Transactional(readOnly = true)
 @Qualifier("springSocialSecurityUserDetailsService")
-public class SpringSocialSecurityUserDetailsService implements UserDetailsService {
+public class SpringSocialSecurityUserDetailsService implements
+		UserDetailsService {
 
 	@Autowired
 	private UsersConnectionRepository usersConnectionRepository;
+
+	@Autowired
+	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
 	
 	@Autowired
-	private UserAuthoritiesService userAuthoritiesService;
-	
+	private SignUpService signUpService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String userName)
 			throws UsernameNotFoundException {
-		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userName);
-		MultiValueMap<String,Connection<?>> connections = connectionRepository.findAllConnections();
-		Set<ConnectionKey> allConnectionKeys = new HashSet<ConnectionKey>();
-		List<Connection<?>> allConnections = new ArrayList<Connection<?>>();
-		List<ConnectionData> allConnectionData = new ArrayList<ConnectionData>();
-		if (connections.size() > 0)
-		{
-			for (List<Connection<?>> connectionList : connections.values())
-			{
-				for (Connection<?> connection : connectionList)
-				{
-					allConnections.add(connection);
-					if(!allConnectionKeys.contains(connection.getKey()))
-					{
-						allConnectionKeys.add(connection.getKey());
-					}
-					ConnectionData connectionData = connection.createData();
-					allConnectionData.add(connectionData);
-					
-				}
-			}
-			if (allConnections.size() > 0)
-			{
-				return new User(userName,new SpringSocialSecurityPasswordBuilder(allConnectionData).build(),true,true,true,true,userAuthoritiesService.getAuthoritiesForUser(allConnectionKeys,userName));
-			}
-			else
-			{
-				throw new UsernameNotFoundException(userName);
+		ConnectionRepository connectionRepository = usersConnectionRepository
+				.createConnectionRepository(userName);
+		SpringSocialSecurityProfile springSocialSecurityProfile = signUpService.getUserProfile(userName);
+		List<Connection<?>> allConnections = getConnections(connectionRepository,userName);
+		if (allConnections.size() > 0) {
 				
-			}	
-		}
-		else
-		{
+				Authentication authentication = authenticationFactory
+						.createAuthenticationForAllConnections(userName,
+								springSocialSecurityProfile.getPassword(),
+								allConnections);
+				return new User(userName, authentication.getCredentials()
+						.toString(), true, true, true, true,
+						authentication.getAuthorities());
+	
+		} else {
 			throw new UsernameNotFoundException(userName);
 		}
-		
-		
-	
-		
-		
-		
+
 	}
+	
+
+	private List<Connection<?>> getConnections(ConnectionRepository connectionRepository,String userName)
+	{
+		MultiValueMap<String, Connection<?>> connections = connectionRepository
+		.findAllConnections();
+		List<Connection<?>> allConnections = new ArrayList<Connection<?>>();
+		if (connections.size() > 0) {
+			for (List<Connection<?>> connectionList : connections.values()) {
+				for (Connection<?> connection : connectionList) {
+					allConnections.add(connection);
+				}
+			}
+		}
+		return allConnections;
+	}
+	
+	public void setUsersConnectionRepository(
+			UsersConnectionRepository usersConnectionRepository) {
+		this.usersConnectionRepository = usersConnectionRepository;
+	}
+
+
+	public void setAuthenticationFactory(
+			SpringSocialSecurityAuthenticationFactory authenticationFactory) {
+		this.authenticationFactory = authenticationFactory;
+	}
+
+
+	public void setSignUpService(SignUpService signUpService) {
+		this.signUpService = signUpService;
+	}
+		
 
 }

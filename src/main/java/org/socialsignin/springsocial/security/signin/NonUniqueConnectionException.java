@@ -17,9 +17,7 @@ package org.socialsignin.springsocial.security.signin;
 
 public class NonUniqueConnectionException extends RuntimeException {
 
-	public NonUniqueConnectionException(String message)
-	{
+	public NonUniqueConnectionException(String message) {
 		super(message);
 	}
 }
-

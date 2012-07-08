@@ -15,31 +15,32 @@
  */
 package org.socialsignin.springsocial.security.signin;
 
-import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionData;
 
 /**
-* POJO for holding userid and connection, set in session by SpringSocialSecuritySignInService
-* and retrieved from session in SpringSocialSecurityAuthenticationFilter
-* 
-* @author Michael Lavelle
-*/
+ * POJO for holding userid and connection, set in session by
+ * SpringSocialSecuritySignInService and retrieved from session in
+ * SpringSocialSecurityAuthenticationFilter
+ * 
+ * @author Michael Lavelle
+ */
 public class SpringSocialSecuritySignInDetails {
 
 	public String getUserId() {
 		return userId;
 	}
 
-	public Connection<?> getConnection() {
-		return connection;
+	public ConnectionData getConnectionData() {
+		return connectionData;
 	}
 
 	private String userId;
-	private Connection<?> connection;
-	
-	public SpringSocialSecuritySignInDetails(String userId,Connection<?> connection)
-	{
+	private ConnectionData connectionData;
+
+	public SpringSocialSecuritySignInDetails(String userId,
+			ConnectionData connectionData) {
 		this.userId = userId;
-		this.connection = connection;
+		this.connectionData = connectionData;
 	}
-	
+
 }

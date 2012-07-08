@@ -22,13 +22,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.connect.ConnectionKey;
 
 /**
-* A service that provides the granted authorities for a given userId
-* Implemented by {@link SimpleUserAuthoritiesService}.
-* @author Michael Lavelle 
-*/
+ * A service that provides the granted authorities for a given userId
+ * Implemented by {@link SimpleUserAuthoritiesService}.
+ * 
+ * @author Michael Lavelle
+ */
 public interface UserAuthoritiesService {
 
-	public List<GrantedAuthority> getAuthoritiesForUser(Set<ConnectionKey> providerIds,String userId);
+	public List<GrantedAuthority> getAuthoritiesForUser(
+			Set<ConnectionKey> providerIds, String userId);
+
 	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey);
 
 }

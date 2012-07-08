@@ -15,16 +15,11 @@
  */
 package org.socialsignin.springsocial.security.signin;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.socialsignin.springsocial.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,53 +28,61 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 /**
-* @author Michael Lavelle
-*/
-public class SpringSocialSecurityConnectInterceptor<S> extends EnsureUniqueConnectInterceptor<S> implements
-		ConnectInterceptor<S> {
-	
+ * @author Michael Lavelle
+ */
+public class SpringSocialSecurityConnectInterceptor<S> extends
+		EnsureUniqueConnectInterceptor<S> implements ConnectInterceptor<S> {
+
 	@Autowired
 	@Qualifier("userAuthoritiesService")
 	private UserAuthoritiesService userAuthoritiesService;
-	
-	@Autowired(required=false)
+
+	@Autowired(required = false)
 	private RememberMeServices rememberMeServices;
+
+	@Autowired
+	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
 
 	@Override
 	public void postConnect(Connection<S> connection, WebRequest webRequest) {
-		
+
 		super.postConnect(connection, webRequest);
+
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<? extends GrantedAuthority> existingAuthorities = authentication.getAuthorities();
-		GrantedAuthority newAuthority = userAuthoritiesService.getProviderAuthority(connection.getKey());
+		Collection<? extends GrantedAuthority> existingAuthorities = authentication
+				.getAuthorities();
 		
-		if (!existingAuthorities.contains(newAuthority))
-		{
-			Set<String> providerIds =new HashSet<String>();
-			providerIds.add(connection.getKey().getProviderId());
-			List<GrantedAuthority> newAuthorities = new ArrayList<GrantedAuthority>();
-			newAuthorities.add(newAuthority);
-			newAuthorities.addAll(existingAuthorities);
-			Authentication newAuthentication = new UsernamePasswordAuthenticationToken(authentication.getName(), new SpringSocialSecurityPasswordBuilder((String)authentication.getCredentials(),connection.createData()).build(),newAuthorities);		
-			SecurityContextHolder.getContext().setAuthentication(newAuthentication);
-			if (rememberMeServices != null && webRequest instanceof ServletWebRequest)
-			{
-				ServletWebRequest servletWebRequest = ((ServletWebRequest)webRequest);
-				rememberMeServices.loginSuccess(servletWebRequest.getRequest(), servletWebRequest.getResponse(), newAuthentication);
+		GrantedAuthority newAuthority = userAuthoritiesService
+				.getProviderAuthority(connection.getKey());
+		
+		if (!existingAuthorities.contains(newAuthority)) {
+			
+			Authentication newAuthentication = authenticationFactory
+					.updateAuthenticationForNewConnection(authentication,
+							connection);
+			SecurityContextHolder.getContext().setAuthentication(
+					newAuthentication);
+			
+			if (rememberMeServices != null
+					&& webRequest instanceof ServletWebRequest) {
+				
+				ServletWebRequest servletWebRequest = ((ServletWebRequest) webRequest);
+				rememberMeServices.loginSuccess(servletWebRequest.getRequest(),
+						servletWebRequest.getResponse(), newAuthentication);
 			}
 		}
-	} 
+	}
 
 	@Override
 	public void preConnect(ConnectionFactory<S> arg0,
 			MultiValueMap<String, String> arg1, WebRequest arg2) {
-		
+			// No-op
 	}
 
 }
