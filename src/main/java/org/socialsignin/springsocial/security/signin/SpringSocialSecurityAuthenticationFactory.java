@@ -61,6 +61,28 @@ public class SpringSocialSecurityAuthenticationFactory {
 						toConnectionKeySet(connections,includeExpiredConnectionsInAuthorisations), userName));
 	}
 
+	public Authentication updateAuthenticationForNewProvider(
+			Authentication existingAuthentication, String providerId) {
+		return createNewAuthentication(
+				existingAuthentication.getName(),
+				existingAuthentication.getCredentials().toString(),
+				addAuthority(existingAuthentication, userAuthoritiesService
+						.getProviderAuthority(providerId)));
+	}
+	
+	public Authentication updateAuthenticationForNewProviders(
+			Authentication existingAuthentication, Set<String> providerIds) {
+		List<GrantedAuthority> newAuthorities = new ArrayList<GrantedAuthority>();
+		for (String providerId : providerIds)
+		{
+			newAuthorities.add(userAuthoritiesService.getProviderAuthority(providerId));
+		}
+		return createNewAuthentication(
+				existingAuthentication.getName(),
+				existingAuthentication.getCredentials().toString(),
+				addAuthorities(existingAuthentication, newAuthorities));
+	}
+	
 	public Authentication updateAuthenticationForNewConnection(
 			Authentication existingAuthentication, Connection<?> connection) {
 		return createNewAuthentication(
@@ -98,6 +120,22 @@ public class SpringSocialSecurityAuthenticationFactory {
 		if (newAuthority != null) {
 			if (!authorities.contains(newAuthority)) {
 				authorities.add(newAuthority);
+			}
+		}
+
+		return authorities;
+	}
+	
+	private Collection<? extends GrantedAuthority> addAuthorities(
+			Authentication authentication, Collection<GrantedAuthority> newAuthorities) {
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.addAll(authentication.getAuthorities());
+		if (newAuthorities != null) {
+			for (GrantedAuthority newAuthority : newAuthorities)
+			{
+				if (!authorities.contains(newAuthority)) {
+					authorities.add(newAuthority);
+				}
 			}
 		}
 

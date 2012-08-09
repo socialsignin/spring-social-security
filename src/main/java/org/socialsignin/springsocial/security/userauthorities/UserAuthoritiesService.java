@@ -33,5 +33,8 @@ public interface UserAuthoritiesService {
 			Set<ConnectionKey> providerIds, String userId);
 
 	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey);
+	
+	public GrantedAuthority getProviderAuthority(String providerId);
+
 
 }

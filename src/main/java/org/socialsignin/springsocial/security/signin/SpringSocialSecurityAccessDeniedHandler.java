@@ -39,6 +39,7 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
@@ -50,6 +51,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class SpringSocialSecurityAccessDeniedHandler extends
 		AccessDeniedHandlerImpl {
 
+	private final static String REQUIRED_PROVIDERS_REQUEST_ATTRIBUTE_NAME = "springSocialSecurityRequiredProviders";
+	
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory springSocialSecurityAuthenticationFactory;
 	
@@ -72,6 +75,7 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 			// If we have found a set of provider ids which the user needs to connect with for this request, select one of them and send the user to the connect/<provider> page
 			AccessDeniedHandlerImpl providerSpecificAccessDeniedHandler
 			 = new AccessDeniedHandlerImpl();
+			request.setAttribute(REQUIRED_PROVIDERS_REQUEST_ATTRIBUTE_NAME, requiredProviderIds);
 			providerSpecificAccessDeniedHandler.setErrorPage("/connect/" + requiredProviderIds.iterator().next());
 			providerSpecificAccessDeniedHandler.handle(request, response, accessDeniedException);
 		}
@@ -83,9 +87,10 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 	}
 
 	
+	
+	
 	protected List<Set<String>> getCombinationsOfAdditionalProviderIds()
 	{
-		List<Set<String>> listOfCombinationsOfAdditionalProviderIds = new ArrayList<Set<String>>();
 		Authentication existingAuthentication = SecurityContextHolder.getContext().getAuthentication();
 		Set<String> unconnectedProviders = new HashSet<String>();
 		for (String registeredProviderId : connectionFactoryRegistry.registeredProviderIds())
@@ -96,15 +101,8 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 				unconnectedProviders.add(registeredProviderId);
 			}
 		}
-		// Just return list of single-provider combinations for now
-		// TODO Add full combinations
-		for (String unconnectedProvider : unconnectedProviders)
-		{
-			Set<String> singleProviderAddition = new HashSet<String>();
-			singleProviderAddition.add(unconnectedProvider);
-			listOfCombinationsOfAdditionalProviderIds.add(singleProviderAddition);
-		}
-		return listOfCombinationsOfAdditionalProviderIds;
+		CombinationHelper<String> combinationHelper = new CombinationHelper<String>(unconnectedProviders);
+		return combinationHelper.getCombinations();
 	}
 	
 	protected Set<String> getRequiredProviderIds(HttpServletRequest request) throws ServletException

@@ -37,9 +37,15 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 
 	private String defaultAuthorityName = "ROLE_USER";
 
+	
+	
 	public String getDefaultProviderAuthorityName(ConnectionKey connectionKey) {
+		return getDefaultProviderAuthorityName(connectionKey.getProviderId());
+	}
+	
+	public String getDefaultProviderAuthorityName(String providerId) {
 		return defaultAuthorityName + "_"
-				+ connectionKey.getProviderId().toUpperCase();
+				+ providerId.toUpperCase();
 	}
 
 	public void setDefaultAuthorityName(String defaultAuthorityName) {
@@ -64,11 +70,19 @@ public class SimpleUserAuthoritiesService implements UserAuthoritiesService {
 			Set<ConnectionKey> connectionKeys, String userId) {
 		return getDefaultAuthorities(connectionKeys);
 	}
+	
+	@Override
+	public GrantedAuthority getProviderAuthority(String providerId) {
+		return new SimpleGrantedAuthority(
+				getDefaultProviderAuthorityName(providerId));
+	}
 
 	@Override
 	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey) {
 		return new SimpleGrantedAuthority(
 				getDefaultProviderAuthorityName(connectionKey));
 	}
+
+
 
 }
