@@ -24,10 +24,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
@@ -43,6 +47,10 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 
 	@Autowired(required = false)
 	private RememberMeServices rememberMeServices;
+	
+	private final static String SAVED_REQUEST_URL_ATTRIBUTE_NAME = "springSocialSecurityConnectInterceptorSavedRequestUrl";
+
+	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
@@ -77,12 +85,31 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 						servletWebRequest.getResponse(), newAuthentication);
 			}
 		}
+		if (webRequest instanceof ServletWebRequest)
+		{
+			ServletWebRequest servletWebRequest
+			= (ServletWebRequest)webRequest;
+			SavedRequest savedRequest = requestCache.getRequest(servletWebRequest.getRequest(), servletWebRequest.getResponse());
+			if (savedRequest != null)
+			{
+				String redirectUrl = savedRequest.getRedirectUrl();
+				if (redirectUrl != null && savedRequest.getMethod().equalsIgnoreCase("get"))
+				{
+					servletWebRequest.setAttribute(SAVED_REQUEST_URL_ATTRIBUTE_NAME, savedRequest.getRedirectUrl(), RequestAttributes.SCOPE_SESSION);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void preConnect(ConnectionFactory<S> arg0,
 			MultiValueMap<String, String> arg1, WebRequest arg2) {
 			// No-op
+	}
+	
+
+	public void setRequestCache(RequestCache requestCache) {
+		this.requestCache = requestCache;
 	}
 
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.socialsignin.springsocial.security.userauthorities.UserAuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -37,6 +39,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -48,10 +53,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * 
  * @author Michael Lavelle
  */
+@Component
 public class SpringSocialSecurityAccessDeniedHandler extends
 		AccessDeniedHandlerImpl {
 
 	private final static String REQUIRED_PROVIDERS_REQUEST_ATTRIBUTE_NAME = "springSocialSecurityRequiredProviders";
+	
+	@Value("${socialsignin.defaultAccessDeniedUrl:/}")
+	private String defaultAccessDeniedUrl;
 	
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory springSocialSecurityAuthenticationFactory;
@@ -62,11 +71,18 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 	@Autowired
 	private ConnectionFactoryRegistry connectionFactoryRegistry;
 	
+
+	private RequestCache requestCache = new HttpSessionRequestCache();
+	
 	@Override
 	public void handle(HttpServletRequest request,
 			HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException,
 			ServletException {
+		
+
+		// Save the request so we can provide user with a continue link after provider connection
+		requestCache.saveRequest(request, response);
 		
 		// Attempt to determine a set of provider ids which are required for this request which the current user has not yet connected with
 		Set<String> requiredProviderIds = getRequiredProviderIds(request);
@@ -81,7 +97,18 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 		}
 		else
 		{
-			super.handle(request, response, accessDeniedException);
+			if (defaultAccessDeniedUrl != null)
+			{
+				AccessDeniedHandlerImpl defaultAccessDeniedHandler
+				 = new AccessDeniedHandlerImpl();
+				defaultAccessDeniedHandler.setErrorPage(defaultAccessDeniedUrl);
+				defaultAccessDeniedHandler.handle(request, response, accessDeniedException);
+				
+			}
+			else
+			{
+				super.handle(request, response, accessDeniedException);
+			}
 
 		}
 	}
@@ -159,6 +186,9 @@ public class SpringSocialSecurityAccessDeniedHandler extends
         return (WebInvocationPrivilegeEvaluator) wipes.values().toArray()[0];
     }
 
-	
+	public void setRequestCache(RequestCache requestCache) {
+		this.requestCache = requestCache;
+	}
+
 	
 }

@@ -17,12 +17,14 @@ package org.socialsignin.springsocial.security.signin;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,7 +51,14 @@ import org.springframework.stereotype.Component;
 @Qualifier("springSocialSecurityAuthenticationFilter")
 public class SpringSocialSecurityAuthenticationFilter extends
 		AbstractAuthenticationProcessingFilter {
+	
+	
 
+	@Value("${socialsignin.defaultAuthenticationSuccessUrl:}")
+	private String defaultAuthenticationSuccessUrl;
+	
+
+	
 	public final static String DEFAULT_AUTHENTICATION_URL = "/authenticate";
 	
 	private boolean removeSignInDetailsFromSessionOnSuccessfulAuthentication = true;
@@ -84,8 +94,20 @@ public class SpringSocialSecurityAuthenticationFilter extends
 		super.setAuthenticationManager(authenticationManager);
 	}
 
-	protected SpringSocialSecurityAuthenticationFilter() {
+	public SpringSocialSecurityAuthenticationFilter() {
 		super(DEFAULT_AUTHENTICATION_URL);
+	}
+	
+	@PostConstruct
+	public void init()
+	{
+		if (defaultAuthenticationSuccessUrl != null && !defaultAuthenticationSuccessUrl.isEmpty())
+		{
+			SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler
+			= new SavedRequestAwareAuthenticationSuccessHandler();
+			savedRequestAwareAuthenticationSuccessHandler.setDefaultTargetUrl(defaultAuthenticationSuccessUrl);		
+			setAuthenticationSuccessHandler(savedRequestAwareAuthenticationSuccessHandler);
+		}
 	}
 
 	protected SpringSocialSecurityAuthenticationFilter(String authenticationUrl) {
@@ -97,6 +119,8 @@ public class SpringSocialSecurityAuthenticationFilter extends
 			HttpServletResponse response) throws AuthenticationException,
 			IOException, ServletException {
 
+
+		
 		SpringSocialSecuritySignInDetails signInDetails = (SpringSocialSecuritySignInDetails) request
 				.getSession()
 				.getAttribute(
