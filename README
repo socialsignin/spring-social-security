@@ -1,6 +1,11 @@
-For a simple "Hello World" app demonstrating spring-social-security see:
+For simple "Hello World" apps demonstrating spring-social-security see:
 
-https://github.com/socialsignin/spring-social-security-demo
+https://github.com/socialsignin/spring-social-security-demo  ( Basic integration with core spring-social )
+
+https://github.com/socialsignin/socialsignin-showcase ( Using SocialSignin provider modules for auto-registration of providers and API abstraction layer )
+
+https://github.com/socialsignin/socialsignin-roo-showcase ( Roo project with SocialSignin modules and Roo-backed persistence for UserConnections )
+
 
 NB: For users upgrading from 1.0.1 to 1.0.2 : This version now requires new entries to exist in the 
 UsersConnectionRepository for a "springSocialSecurity" provider.  One entry is required for each existing
