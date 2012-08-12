@@ -21,6 +21,9 @@ import org.springframework.social.ServiceProvider;
 import org.springframework.social.connect.ConnectionData;
 
 /**
+ * SpringSocialSecurity ServiceProvider implementation
+
+ * 
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityServiceProvider implements

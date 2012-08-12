@@ -1,7 +1,6 @@
 package org.socialsignin.springsocial.security.signin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +8,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Helper class which given a collection of elements of
+ * type <T> can obtain a list of all possible combinations
+ * of those elements.  The list of combinations is ordered
+ * in ascending order of the number of elements in each combination.
+ * 
+ * @author Michael Lavelle
+ *
+ * @param <T> The type of the elements in each combination
+ */
 public class CombinationHelper<T> {
 
 	private List<T> valuesList;

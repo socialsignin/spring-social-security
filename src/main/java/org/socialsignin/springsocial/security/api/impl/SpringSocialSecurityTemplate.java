@@ -20,6 +20,10 @@ import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.springframework.social.connect.ConnectionData;
 
 /**
+ * Implementation of <code>SpringSocialSecurity</code> whose internal representation
+ * of local user profile data is a ConnectionData instance.  Allows a <code>ConnectionRepository</code>
+ * to be used as a persistence mechanism for <code>SpringSocalSecurityProfile</code>s
+ * 
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityTemplate implements SpringSocialSecurity {
@@ -30,6 +34,10 @@ public class SpringSocialSecurityTemplate implements SpringSocialSecurity {
 		this.connectionData = connectionData;
 	}
 
+	/**
+	 * Obtain the local user's account details from wrapped
+	 * <code>ConnectionData</code> instance.
+	 */
 	@Override
 	public SpringSocialSecurityProfile getUserProfile() {
 

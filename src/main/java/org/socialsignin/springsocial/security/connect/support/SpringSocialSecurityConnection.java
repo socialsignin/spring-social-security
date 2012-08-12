@@ -22,6 +22,12 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.support.AbstractConnection;
 
 /**
+ * Represents a Connection to spring-social-security : allows
+ * services provided by spring-social-security (such as retrieving
+ * a local user's profile) to be accessed in the same way as 
+ * external 3rd party are accessed and means that a ConnectionRepository
+ * can be used to persist local user accounts.
+ * 
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityConnection extends

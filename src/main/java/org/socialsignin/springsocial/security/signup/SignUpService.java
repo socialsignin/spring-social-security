@@ -19,19 +19,59 @@ import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.springframework.web.context.request.WebRequest;
 
 /**
+ * Service which provides local sign-up services when a user
+ * creates a local user account using a 3rd party provider
+ * for authentication and selects a local username.
+ * 
  * @author Michael Lavelle
  */
 public interface SignUpService {
 
+	/**
+	 * Creates a local user account only but does not complete connection
+	 * with spring-social
+	 *
+	 * Called by SpringSocialSecurityConnectionSignUp when local
+	 * user accounts are created implicitly on connection with
+	 * a 3rd party provider.
+	 *
+	 * @param springSocialSecurityProfile
+	 * @param webRequest
+	 * @throws UsernameAlreadyExistsException
+	 */
 	public void signUpUser(
 			SpringSocialSecurityProfile springSocialSecurityProfile) throws UsernameAlreadyExistsException;
 
+	/**
+	 * Creates a local user account and completes the connection
+	 * to spring-social in a single unit-of-work, allowing
+	 * implementations to ensure that these steps behave transactionally
+	 *
+	 * Called by SpringSocialSecuritySignUpController when user submits
+	 * their signup form
+	 *
+	 * @param springSocialSecurityProfile
+	 * @param webRequest
+	 * @throws UsernameAlreadyExistsException
+	 */
 	public void signUpUserAndCompleteConnection(
 			SpringSocialSecurityProfile springSocialSecurityProfile,
 			WebRequest webRequest) throws UsernameAlreadyExistsException;
 
+	/**
+	 * Checks if a local user id is available
+	 * 
+	 * @param userId The userid to check for availablity
+	 * @return
+	 */
 	public boolean isUserIdAvailable(String userId);
 	
+	/**
+	 * Obtain the local user's profile
+	 * 
+	 * @param userId The userId of the user whose profile we wish to retrieve
+	 * @return
+	 */
 	public SpringSocialSecurityProfile getUserProfile(String userId);
 
 }

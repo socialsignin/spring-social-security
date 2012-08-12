@@ -33,6 +33,9 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Service;
 
 /**
+ * Encapsulates the logic of creating/updating local user authentication
+ * on the basis of provider-specific ROLE scheme.
+ * 
  * @author Michael Lavelle
  */
 @Service

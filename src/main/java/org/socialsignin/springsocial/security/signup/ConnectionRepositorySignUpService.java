@@ -38,6 +38,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.WebRequest;
 
 /**
+ * Service which provides local sign-up services when a user
+ * creates a local user account using a 3rd party provider
+ * for authentication and selects a local username.
+ * 
+ * This implementation stores local account details such
+ * as userName and displayName in the local ConnectionRepository itself 
+ * 
  * @author Michael Lavelle
  */
 @Service

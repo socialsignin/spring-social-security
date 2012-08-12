@@ -36,6 +36,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 /**
+ * Subclasses of this class, registered as ConnectInterceptors
+ * in spring social, 
+ * 
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityConnectInterceptor<S> extends
@@ -55,11 +58,31 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
 
+	/**
+	 * This callback 1)  Ensures that 2 different local users
+	 * cannot share the same 3rd party connection 2) Updates the current
+	 * user's authentication if the set of roles they are assigned
+	 * needs to change now that this connection has been made.
+	 * 3) Looks for a request previously saved by an access denied
+	 * handler, and if present, sets the url of this original
+	 * pre-authorisation request as a session attribute
+	 * 
+	 */
 	@Override
 	public void postConnect(Connection<S> connection, WebRequest webRequest) {
 
 		super.postConnect(connection, webRequest);
 
+		/**
+		 * User roles are generated according to connected
+		 * providers in spring-social-security
+		 * 
+		 * Now that this connection has been made,
+		 * doe we need to update the user roles?
+		 * 
+		 * If so, update the current user's authentication and update
+		 * remember-me services accordingly.
+		 */
 		Authentication authentication = SecurityContextHolder.getContext()
 				.getAuthentication();
 		
@@ -85,6 +108,20 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 						servletWebRequest.getResponse(), newAuthentication);
 			}
 		}
+		
+		/**
+		 * This connection may have been instigated by an 
+		 * access denied handler which may have saved the
+		 * original request made by the user before their access
+		 * was denied.  
+		 * 
+		 * Spring Social sends the user to a particular view
+		 * on completion of connection.  We may wish to offer the
+		 * user a "continue" link on this view, allowing their
+		 * original request (if saved by the access denied handler)
+		 * to be re-attempted
+		 *
+		 */
 		if (webRequest instanceof ServletWebRequest)
 		{
 			ServletWebRequest servletWebRequest
@@ -101,6 +138,11 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 		}
 	}
 
+	
+
+	/**
+	 * No Op
+	 */
 	@Override
 	public void preConnect(ConnectionFactory<S> arg0,
 			MultiValueMap<String, String> arg1, WebRequest arg2) {
@@ -108,8 +150,24 @@ public class SpringSocialSecurityConnectInterceptor<S> extends
 	}
 	
 
+	/**
+	 * Set a request cache here to change the default 
+	 * <code>HttpSessionRequestCache</code> used by this class
+	 * to determine if a saved request was set previously
+	 * by an access denied handler.
+	 * 
+	 * @param requestCache
+	 */
 	public void setRequestCache(RequestCache requestCache) {
 		this.requestCache = requestCache;
+	}
+	
+	/**
+	 * @param rememberMeServices Optional remember-me services, required if we wish remember-me services
+	 * to be notified when a user-authorisation change occurs as a result of this connection
+	 */
+	public void setRememberMeServices(RememberMeServices rememberMeServices) {
+		this.rememberMeServices = rememberMeServices;
 	}
 
 }

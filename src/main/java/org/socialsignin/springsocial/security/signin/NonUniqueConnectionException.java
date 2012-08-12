@@ -16,6 +16,10 @@
 package org.socialsignin.springsocial.security.signin;
 
 /**
+ * Exception raised when a user attempts to connect their
+ * local user account to a 3rd party connection already
+ * associated with a different local user account.
+ * 
  * @author Michael Lavelle
  */
 public class NonUniqueConnectionException extends RuntimeException {

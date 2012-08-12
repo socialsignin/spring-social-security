@@ -27,6 +27,8 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.stereotype.Service;
 
 /**
+ * SpringSocialSecurity ConnectionFactory implementation
+ * 
  * @author Michael Lavelle
  */
 @Service

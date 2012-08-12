@@ -19,10 +19,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
+ * Convenience helper class for obtaining a user id if available from 
+ * security context.
+ * 
  * @author Michael Lavelle
  */
 public class AuthenticatedUserIdHolder {
 
+	/**
+	 * @return The userId of the currently authenticated user
+	 * or null if the local user is anonymous
+	 */
 	public static String getAuthenticatedUserId() {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();

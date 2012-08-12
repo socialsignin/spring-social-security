@@ -23,6 +23,8 @@ import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 
 /**
+ * SpringSocialSecurity ApiAdapter implementation
+ * 
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityAdapter implements

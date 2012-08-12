@@ -32,7 +32,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 /**
  * Controller for displaying/procesing a sign up form and handling chosen user
- * id, checking if it already exists
+ * id, checking if it already exists.
  * 
  * @author Michael Lavelle
  */

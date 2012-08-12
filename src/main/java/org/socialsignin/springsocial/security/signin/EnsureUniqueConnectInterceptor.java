@@ -25,6 +25,21 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.WebRequest;
 
 /**
+ * ConnectInterceptor which provides a workaround for an issue
+ * which can occur in SpringSocial if a user attempts to 
+ * connect their local account with a 3rd party connection already
+ * associated with a different local account.
+ * 
+ * Although this scenario is an edge-case, if it does occur it
+ * leaves spring-social in a state where both local user accounts
+ * sharing the 3rd party connection are effectively locked, with
+ * login to neither being possible, as the application can't
+ * determine which local user account to login.
+ * 
+ * A provider-specific subclass must be created for each
+ * registered provider and registered with spring-social
+ * to handle this edge-case.
+ * 
  * @author Michael Lavelle
  */
 public class EnsureUniqueConnectInterceptor<S> implements ConnectInterceptor<S> {

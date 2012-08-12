@@ -29,11 +29,36 @@ import org.springframework.social.connect.ConnectionKey;
  */
 public interface UserAuthoritiesService {
 
+	/**
+	 * Obtain the list of authorities for a user given a set of connection keys for that user.
+	 * 
+	 * @param providerIds
+	 * @param userId
+	 * @return
+	 */
 	public List<GrantedAuthority> getAuthoritiesForUser(
 			Set<ConnectionKey> providerIds, String userId);
 
+	/**
+	 * Obtain a provider-specific authority which is granted to users with connections
+	 * to this connectionKey's provider, and optionally include the providerUserId for 
+	 * even more fine grained authority scheme - allowing authorities to be granted on the
+	 * basis of a specific connection to a provider.
+	 * 
+	 * @param providerId
+	 * @return A general provider-specific authority which is granted to users with connections
+	 * to this provider
+	 */
 	public GrantedAuthority getProviderAuthority(ConnectionKey connectionKey);
 	
+	/**
+	 * Obtain a general provider-specific authority which is granted to users with connections
+	 * to this provider
+	 * 
+	 * @param providerId
+	 * @return A general provider-specific authority which is granted to users with connections
+	 * to this provider
+	 */
 	public GrantedAuthority getProviderAuthority(String providerId);
 
 

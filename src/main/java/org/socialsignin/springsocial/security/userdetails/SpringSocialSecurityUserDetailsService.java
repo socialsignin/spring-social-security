@@ -18,7 +18,6 @@ package org.socialsignin.springsocial.security.userdetails;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
 import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFactory;
 import org.socialsignin.springsocial.security.signup.SignUpService;
@@ -59,6 +58,14 @@ public class SpringSocialSecurityUserDetailsService implements
 	@Autowired
 	private SignUpService signUpService;
 	
+	/**
+	 * Uses a <code>SignUpService</code> implementation to check if a local user account for this username is available 
+	 * and if so, bases the user's authentication on the set of connections the user currently has to
+	 * 3rd party providers.  Allows provider-specific roles to be set for each user - uses a <code>UsersConnectionRepository</code>
+	 * to obtain list of connections the user has and a <code>SpringSocialSecurityAuthenticationFactory</code>
+	 * to obtain an authentication based on those connections.
+	 * 
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String userName)
 			throws UsernameNotFoundException {

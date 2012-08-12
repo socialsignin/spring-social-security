@@ -15,7 +15,15 @@
  */
 package org.socialsignin.springsocial.security.api;
 
+/**
+ *  Interface specifying a basic set of operations for interacting with Spring-Social-Security. Implemented by SpringSocialSecurityTemplate. 
+ * 
+ * @author Michael Lavelle
+ */
 public interface SpringSocialSecurity {
 
+	/**
+	 * @return Model holding common attributes of local user details in a spring-social-security application
+	 */
 	public SpringSocialSecurityProfile getUserProfile();
 }
