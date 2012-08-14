@@ -25,7 +25,7 @@ Spring-Social-Security Quickstart
 ```
 * Configure your spring security setup with a SpringSocialSecurityAuthenticationFilter in place of a form-login filter:
 ```
- <http auto-config="false" ...
+ <http auto-config="false" 
     	<custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" />
-	...
+	
 ```
