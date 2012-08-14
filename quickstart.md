@@ -62,12 +62,15 @@ and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySi
 - Create a view in your webapp which handles the choice of username by a user and submits to "/signup" 
   ( the default url of SpringSocialSecuritySignUpController )
 - Set the following environment properties in your application
+
 ```
-socialsignin.signUpView=/[name of your choose username view]
-socialsignin.defaultAuthenticationSuccessUrl=[url to send users after login]
+socialsignin.signUpView=(name of your choose username view)
+socialsignin.defaultAuthenticationSuccessUrl=(url to send users after login)
 ```
+
 -- Optionally, configure your UsersConnectionRepository with SpringSocialSecurityConnectionSignUp to allow user local account
    and username selection to happen implicitly where possible, based on connection details from 3rd party provider
+
 ```
 <bean id="usersConnectionRepository"
 		class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
