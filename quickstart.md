@@ -61,6 +61,7 @@ and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySi
 ```
 - Create a view in your webapp which handles the choice of username by a user and submits to "/signup" 
   ( the default url of SpringSocialSecuritySignUpController )
+
 - Set the following environment properties in your application
 
 ```
@@ -87,23 +88,25 @@ Enabling futher connection options for logged-in users
 - When users who have logged in with one provider wish to connect with an additional provider using your application,
 spring-social-security peforms two functions through the use of ConnectInterceptors.
 
-1)  Ensures that no other local user has connected using this provider account previously, as we use 3rd party
+* Ensures that no other local user has connected using this provider account previously, as we use 3rd party
 connection as a means of uniquely identifying a user.
 
-2)  Amends the user's authorisation so they are granted provider-specific roles according to the set of providers
+* Amends the user's authorisation so they are granted provider-specific roles according to the set of providers
 they have connected with.
 
-To enable this functionality
+- To enable this functionality
 
 * Create a subclass of SpringSocialSecurityConnectInterceptor for each provider you wish your users to be able to connect with
 once they are logged in.
+
 ```
 public class TwitterConnectInterceptor extends
 		SpringSocialSecurityConnectInterceptor<Twitter> {
 
 }
 ```
-* Register these connect interceptors with ConnectController
+
+- Register these connect interceptors with ConnectController
 
 Protecting resources using Spring Social Security
 -------------------------------------------------
@@ -121,7 +124,7 @@ you can protect urls with rules such as
 		<intercept-url pattern="/protected/twitter" access="hasRole('ROLE_USER_TWITTER')" />
 ```
 
--- To enable provider-specific access denied handling, add SpringSocialSecurityAccessDeniedHandler to your security setup
+- To enable provider-specific access denied handling, add SpringSocialSecurityAccessDeniedHandler to your security setup
 
 ```
         <access-denied-handler ref="springSocialSecurityAccessDeniedHandler"/>
