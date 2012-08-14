@@ -1,3 +1,25 @@
+About Spring-Social-Security
+============================
+
+Many applications using Spring Security for authentication will need to
+
+* Ask users to sign up using a username and password.
+* Create their own user details store and data access objects
+* Provide account management (eg. forgotten password functionality)
+* Provide access control for protected resources
+
+For applications which already use spring-social to connect with external authenticated apis (eg. Facebook, Twitter)
+, SocialSignIn's spring-social-security module removes these authentication concerns by delegating authentication
+in Spring Security via spring-social to the third party api. Authenticating your website users via spring-social api
+providers means:
+
+* No need for users to remember another password for another site.
+* No need for developers to create their own user details store, as the store used by spring-social is used instead.
+* No need for developers to provide account management as this is provided by the third party api.
+* SpringSocialSecurity can be easily customised to delegate access control decisions to third party api.
+
+
+
 Spring-Social-Security Quickstart
 =================================
 
