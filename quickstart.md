@@ -130,12 +130,7 @@ This handler will attempt to determine a provider which the user needs to connec
 access to provider-protected resources, and if this can be determined, the user with be directed to
 the spring-social provider-specific connection view.  To set a default access denied url in case this can't be 
 determined, set the following property in your application.
+
 ```
 socialsignin.defaultAccessDeniedUrl=
 ```
-
-
-
-
-
-
