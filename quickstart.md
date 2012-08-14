@@ -51,15 +51,16 @@ Configuring your application for Sign-Up/Sign-In
 ------------------------------------------------
 
 - Configure ProviderSignInController with "/authenticate" as the postSignInUrl (the default url for the SpringSocialSecurityAuthenticationFilter)
-- and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySignUpController)
+and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySignUpController)
+
 ```
-  <bean class="org.springframework.social.connect.web.ProviderSignInController" >
+<bean class="org.springframework.social.connect.web.ProviderSignInController" >
     	<property name="signUpUrl" value="/signup" />
         <property name="postSignInUrl" value="/authenticate" />
    </bean>
 ```
 - Create a view in your webapp which handles the choice of username by a user and submits to "/signup" 
-  (the default url of SpringSocialSecuritySignUpController )
+  ( the default url of SpringSocialSecuritySignUpController )
 - Set the following environment properties in your application
 ```
 socialsignin.signUpView=/[name of your choose username view]
