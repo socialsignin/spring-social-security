@@ -16,9 +16,16 @@ providers means:
 * No need for users to remember another password for another site.
 * No need for developers to create their own user details store, as the store used by spring-social is used instead.
 * No need for developers to provide account management as this is provided by the third party api.
-* SpringSocialSecurity can be easily customised to delegate access control decisions to third party api.
+* Provider-specific roles are granted to users on the basis of their connected providers, allowing fine-grained
+permissioning model.
 
+For simple "Hello World" apps demonstrating spring-social-security see:
 
+* https://github.com/socialsignin/spring-social-security-demo  ( Basic integration with core spring-social )
+
+* https://github.com/socialsignin/socialsignin-showcase ( Using SocialSignin provider modules for auto-registration of providers and API abstraction layer )
+
+* https://github.com/socialsignin/socialsignin-roo-showcase ( Roo project with SocialSignin modules and Roo-backed persistence for UserConnections )
 
 Spring-Social-Security Quickstart
 =================================
