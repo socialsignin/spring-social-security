@@ -31,5 +31,20 @@ Core setup
 ```
  <http auto-config="false" 
     	<custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" />
-	
 ```
+- Create a page in your webapp which contains all the socialsignin buttons for login which submit to spring-social's 
+  ProviderSignInController ( default urls are "/signup/<providerid>" ).  Create an entry point in your security configuration
+  for this page and set as the entry-point-ref on your security config.
+```
+    <bean id="springSocialSecurityEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+ 		<property name="loginFormUrl" value="/sociallogin"/>
+     </bean>
+```
+```
+ <http auto-config="false" entry-point-ref="springSocialSecurityEntryPoint" ...
+    	<custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" />
+```
+
+
+
+  
