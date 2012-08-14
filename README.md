@@ -32,8 +32,8 @@ Also see <a href="http://socialsignin.org/spring-social-security/docs/1.0.2-SNAP
 Spring-Social-Security Quickstart
 =================================
 
-Setting up Spring-Social-Security with an existing Spring-Social web application
---------------------------------------------------------------------------------
+Adding Spring-Social-Security to a Spring-Social web application
+----------------------------------------------------------------
 
 - Add repository and dependency to your project
 
