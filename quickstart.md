@@ -32,13 +32,14 @@ Core setup
  <http auto-config="false" 
     	<custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" />
 ```
-- Create a page in your webapp which contains all the socialsignin buttons for login which submit to spring-social's 
-  ProviderSignInController ( default urls are "/signup/<providerid>" ).  Create an entry point in your security configuration
+- Create a page in your webapp which contains all the socialsignin buttons for login and which submits to spring-social's 
+  ProviderSignInController ( default urls are "/signup/[providerid]" ).  Create an entry point in your security configuration
   for this page and set as the entry-point-ref on your security config.
 ```
-    <bean id="springSocialSecurityEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
- 		<property name="loginFormUrl" value="/sociallogin"/>
-     </bean>
+<bean id="springSocialSecurityEntryPoint" 
+class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+     <property name="loginFormUrl" value="/sociallogin"/>
+</bean>
 ```
 
 ```
@@ -50,18 +51,19 @@ Configuring your application for Sign-Up/Sign-In
 ------------------------------------------------
 
 - Configure ProviderSignInController with "/authenticate" as the postSignInUrl (the default url for the SpringSocialSecurityAuthenticationFilter)
-- , and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySignUpController)
+- and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySignUpController)
 ```
   <bean class="org.springframework.social.connect.web.ProviderSignInController" >
     	<property name="signUpUrl" value="/signup" />
         <property name="postSignInUrl" value="/authenticate" />
    </bean>
 ```
-- Create a view in your webapp which handles the choice of username by a user and submits to "/signup" (the default url of SpringSocialSecuritySignUpController )
+- Create a view in your webapp which handles the choice of username by a user and submits to "/signup" 
+  (the default url of SpringSocialSecuritySignUpController )
 - Set the following environment properties in your application
 ```
-socialsignin.signUpView=/<name of your choose username view)
-socialsignin.defaultAuthenticationSuccessUrl=<url to send users after login>
+socialsignin.signUpView=/[name of your choose username view]
+socialsignin.defaultAuthenticationSuccessUrl=[url to send users after login]
 ```
 -- Optionally, configure your UsersConnectionRepository with SpringSocialSecurityConnectionSignUp to allow user local account
    and username selection to happen implicitly where possible, based on connection details from 3rd party provider
