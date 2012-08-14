@@ -27,6 +27,8 @@ For simple "Hello World" apps demonstrating spring-social-security see:
 
 * https://github.com/socialsignin/socialsignin-roo-showcase ( Roo project with SocialSignin modules and Roo-backed persistence for UserConnections )
 
+Also see <a href="http://socialsignin.org/spring-social-security/docs/1.0.2-SNAPSHOT/api/">JavaDoc for Spring Social Security</a> for API docs.
+
 Spring-Social-Security Quickstart
 =================================
 
