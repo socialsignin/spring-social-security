@@ -114,13 +114,14 @@ socialsignin.defaultAuthenticationSuccessUrl=(url to send users after login)
 Enabling futher connection options for logged-in users
 ------------------------------------------------------
 
-- When users who have logged in with one provider wish to connect with an additional provider using your application,
-spring-social-security peforms two functions through the use of ConnectInterceptors.
+- Spring Social's ConnectController allow users who have logged in with one provider to connect with an
+another 3rd-party provider. spring-social-security peforms two functions to support this use-case
+through the use of ConnectInterceptors.  These interceptors
 
-* Ensures that no other local user has connected using this provider account previously, as we use 3rd party
+* Ensure that no other local user has connected using this provider account previously, as we use 3rd party
 connection as a means of uniquely identifying a user.
 
-* Amends the user's authorisation so they are granted provider-specific roles according to the set of providers
+* Amend the user's authorisation so they are granted provider-specific roles according to the set of providers
 they have connected with.
 
 - To enable this functionality
