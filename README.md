@@ -61,9 +61,9 @@ Core setup
  <http auto-config="false" 
     	<custom-filter position="FORM_LOGIN_FILTER" ref="springSocialSecurityAuthenticationFilter" />
 ```
-- Create a page in your webapp which contains all the socialsignin buttons for login and which submits to spring-social's 
+- Create a page in your webapp ( <a href="https://github.com/socialsignin/spring-social-security-demo/blob/master/src/main/webapp/oauthlogin.jsp">example</a> ) which contains all the socialsignin buttons for login and which submits to spring-social's 
   ProviderSignInController ( default urls are "/signup/[providerid]" ).  Create an entry point in your security configuration
-  for this page and set as the entry-point-ref on your security config.
+  for this page and set as the entry-point-ref on your security config.  
 ```
 <bean id="springSocialSecurityEntryPoint" 
 class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
@@ -88,8 +88,9 @@ and set its signUpUrl to be "/signup" (the default url of SpringSocialSecuritySi
         <property name="postSignInUrl" value="/authenticate" />
    </bean>
 ```
-- Create a view in your webapp which handles the choice of username by a user and submits to "/signup" 
-  ( the default url of SpringSocialSecuritySignUpController )
+- Create a view in your webapp handles the choice of username by a user - this view will be served
+by SpringSocialSecuritySignUpController under default url of "/signup" and will need to post username
+back to this "/signup" url ( <a href="https://github.com/socialsignin/spring-social-security-demo/blob/master/src/main/webapp/WEB-INF/signUpForm.jsp">example</a>
 
 - Set the following environment properties in your application
 
@@ -115,7 +116,7 @@ Enabling futher connection options for logged-in users
 ------------------------------------------------------
 
 - Spring Social's ConnectController allow users who have logged in with one provider to connect with an
-another 3rd-party provider. spring-social-security peforms two functions to support this use-case
+another 3rd-party provider. spring-social-security peforms two functions to support this use-case with ConnectController
 through the use of ConnectInterceptors.  These interceptors
 
 * Ensure that no other local user has connected using this provider account previously, as we use 3rd party
