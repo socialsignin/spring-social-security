@@ -1,9 +1,10 @@
 Spring-Social-Security Quickstart
----------------------------------
+=================================
 
-- Core setup
+Core setup
+----------
 
--- Add repository and dependency to your project
+- Add repository and dependency to your project
 
 ```
 <repositories>
@@ -20,12 +21,12 @@ Spring-Social-Security Quickstart
 			<version>1.0.2-SNAPSHOT</version>
 	</dependency>
 ```
--- Component-scan for spring-social-security components in both your application context and in your mvc context
-* 
+- Component-scan for spring-social-security components in both your application context and in your mvc context
+
 ```
 	<context:component-scan base-package="org.socialsignin.springsocial.security" />
 ```
--- Configure your spring security setup with a SpringSocialSecurityAuthenticationFilter in place of a form-login filter
+- Configure your spring security setup with a SpringSocialSecurityAuthenticationFilter in place of a form-login filter
 
 ```
  <http auto-config="false" 
