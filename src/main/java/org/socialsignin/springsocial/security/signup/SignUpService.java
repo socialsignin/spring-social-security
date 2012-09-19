@@ -26,7 +26,7 @@ import org.springframework.web.context.request.WebRequest;
  * 
  * @author Michael Lavelle
  */
-public interface SignUpService {
+public interface SignUpService<P extends SpringSocialProfile> {
 
 	/**
 	 * Creates a local user account only but does not complete connection
@@ -41,7 +41,7 @@ public interface SignUpService {
 	 * @throws UsernameAlreadyExistsException
 	 */
 	public void signUpUser(
-			SpringSocialProfile springSocialProfile) throws UsernameAlreadyExistsException;
+			P springSocialProfile) throws UsernameAlreadyExistsException;
 
 	/**
 	 * Creates a local user account and completes the connection
@@ -56,7 +56,7 @@ public interface SignUpService {
 	 * @throws UsernameAlreadyExistsException
 	 */
 	public void signUpUserAndCompleteConnection(
-			SpringSocialProfile springSocialProfile,
+			P springSocialProfile,
 			WebRequest webRequest) throws UsernameAlreadyExistsException;
 
 	/**
@@ -73,6 +73,6 @@ public interface SignUpService {
 	 * @param userId The userId of the user whose profile we wish to retrieve
 	 * @return
 	 */
-	public SpringSocialProfile getUserProfile(String userId);
+	public P getUserProfile(String userId);
 
 }
