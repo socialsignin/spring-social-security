@@ -43,8 +43,8 @@ public class SpringSocialSecurityTemplate implements SpringSocialSecurity {
 
 		return new SpringSocialSecurityProfile(
 				connectionData.getProviderUserId(),
-				connectionData.getAccessToken(),
 				connectionData.getDisplayName(),
+				connectionData.getAccessToken(),
 				connectionData.getImageUrl(),
 				connectionData.getProfileUrl());
 	}

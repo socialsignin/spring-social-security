@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.socialsignin.springsocial.security.api.SpringSocialProfile;
 import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
 import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.socialsignin.springsocial.security.connect.SpringSocialSecurityConnectionFactory;
@@ -47,7 +48,6 @@ import org.springframework.web.context.request.WebRequest;
  * 
  * @author Michael Lavelle
  */
-@Service
 public class ConnectionRepositorySignUpService implements SignUpService {
 
 	@Autowired
@@ -56,13 +56,13 @@ public class ConnectionRepositorySignUpService implements SignUpService {
 	@Autowired
 	private ConnectionFactoryLocator connectionFactoryLocator;
 
-	private Connection<SpringSocialSecurity> createSpringSocialSecurityConnectionFromProfile(SpringSocialSecurityProfile springSocialSecurityProfile)
+	private Connection<SpringSocialSecurity> createSpringSocialSecurityConnectionFromProfile(SpringSocialProfile springSocialProfile)
 	{
 		ConnectionData connectionData = new ConnectionData(
 				SpringSocialSecurityConnectionFactory.SPRING_SOCIAL_SECURITY_PROVIDER_NAME,
-			springSocialSecurityProfile.getUserName(),
-			springSocialSecurityProfile.getPassword(), springSocialSecurityProfile.getProfileUrl(),
-			springSocialSecurityProfile.getImageUrl(), springSocialSecurityProfile.getPassword(),
+			springSocialProfile.getUserName(),
+			springSocialProfile.getDisplayName(), springSocialProfile.getProfileUrl(),
+			springSocialProfile.getImageUrl(), springSocialProfile.getPassword(),
 			null, null, null);
 		
 		
@@ -91,31 +91,31 @@ public class ConnectionRepositorySignUpService implements SignUpService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void signUpUser(
-			SpringSocialSecurityProfile springSocialSecurityProfile) throws UsernameAlreadyExistsException{
+			SpringSocialProfile springSocialProfile) throws UsernameAlreadyExistsException{
 
 		// Check if username is available
-		if (!isUserIdAvailable(springSocialSecurityProfile.getUserName())) {
-			throw new UsernameAlreadyExistsException(springSocialSecurityProfile.getUserName());
+		if (!isUserIdAvailable(springSocialProfile.getUserName())) {
+			throw new UsernameAlreadyExistsException(springSocialProfile.getUserName());
 		}
 		
 		// Populate default password if none is set
-		if (springSocialSecurityProfile.getPassword() == null) {
-			springSocialSecurityProfile.setPassword(generateNewPassword());
+		if (springSocialProfile.getPassword() == null) {
+			springSocialProfile.setPassword(generateNewPassword());
 		}
 	
 		
 		// Create a connection for this spring social security profile	
 		Connection<SpringSocialSecurity> springSocialSecurityConnection =
-			createSpringSocialSecurityConnectionFromProfile(springSocialSecurityProfile);
+			createSpringSocialSecurityConnectionFromProfile(springSocialProfile);
 				
 
 		// Try to persist this connection
 		try {
 			usersConnectionRepository.createConnectionRepository(
-					springSocialSecurityProfile.getUserName()).addConnection(
+					springSocialProfile.getUserName()).addConnection(
 					springSocialSecurityConnection);
 		} catch (DuplicateConnectionException e) {
-			throw new UsernameAlreadyExistsException(springSocialSecurityProfile.getUserName());
+			throw new UsernameAlreadyExistsException(springSocialProfile.getUserName());
 		}
 
 	}
@@ -123,10 +123,10 @@ public class ConnectionRepositorySignUpService implements SignUpService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void signUpUserAndCompleteConnection(
-			SpringSocialSecurityProfile springSocialSecurityProfile,
+			SpringSocialProfile springSocialProfile,
 			WebRequest webRequest) throws UsernameAlreadyExistsException {
-		signUpUser(springSocialSecurityProfile);
-		ProviderSignInUtils.handlePostSignUp(springSocialSecurityProfile.getUserName(), webRequest);
+		signUpUser(springSocialProfile);
+		ProviderSignInUtils.handlePostSignUp(springSocialProfile.getUserName(), webRequest);
 	}
 
 	@Override

@@ -18,6 +18,7 @@ package org.socialsignin.springsocial.security.userdetails;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.socialsignin.springsocial.security.api.SpringSocialProfile;
 import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFactory;
 import org.socialsignin.springsocial.security.signup.SignUpService;
@@ -71,13 +72,13 @@ public class SpringSocialSecurityUserDetailsService implements
 			throws UsernameNotFoundException {
 		ConnectionRepository connectionRepository = usersConnectionRepository
 				.createConnectionRepository(userName);
-		SpringSocialSecurityProfile springSocialSecurityProfile = signUpService.getUserProfile(userName);
+		SpringSocialProfile springSocialProfile = signUpService.getUserProfile(userName);
 		List<Connection<?>> allConnections = getConnections(connectionRepository,userName);
 		if (allConnections.size() > 0) {
 				
 				Authentication authentication = authenticationFactory
 						.createAuthenticationForAllConnections(userName,
-								springSocialSecurityProfile.getPassword(),
+								springSocialProfile.getPassword(),
 								allConnections);
 				return new User(userName, authentication.getCredentials()
 						.toString(), true, true, true, true,

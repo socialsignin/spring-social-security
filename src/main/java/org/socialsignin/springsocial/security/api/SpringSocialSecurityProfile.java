@@ -31,7 +31,7 @@ package org.socialsignin.springsocial.security.api;
  * 
  * @author Michael Lavelle
  */
-public class SpringSocialSecurityProfile {
+public class SpringSocialSecurityProfile implements SpringSocialProfile {
 
 	private String userName;
 	private String displayName;

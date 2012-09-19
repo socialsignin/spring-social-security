@@ -15,6 +15,7 @@
  */
 package org.socialsignin.springsocial.security.signup;
 
+import org.socialsignin.springsocial.security.api.SpringSocialProfile;
 import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.springframework.web.context.request.WebRequest;
 
@@ -35,12 +36,12 @@ public interface SignUpService {
 	 * user accounts are created implicitly on connection with
 	 * a 3rd party provider.
 	 *
-	 * @param springSocialSecurityProfile
+	 * @param springSocialProfile
 	 * @param webRequest
 	 * @throws UsernameAlreadyExistsException
 	 */
 	public void signUpUser(
-			SpringSocialSecurityProfile springSocialSecurityProfile) throws UsernameAlreadyExistsException;
+			SpringSocialProfile springSocialProfile) throws UsernameAlreadyExistsException;
 
 	/**
 	 * Creates a local user account and completes the connection
@@ -50,12 +51,12 @@ public interface SignUpService {
 	 * Called by SpringSocialSecuritySignUpController when user submits
 	 * their signup form
 	 *
-	 * @param springSocialSecurityProfile
+	 * @param springSocialProfile
 	 * @param webRequest
 	 * @throws UsernameAlreadyExistsException
 	 */
 	public void signUpUserAndCompleteConnection(
-			SpringSocialSecurityProfile springSocialSecurityProfile,
+			SpringSocialProfile springSocialProfile,
 			WebRequest webRequest) throws UsernameAlreadyExistsException;
 
 	/**
@@ -72,6 +73,6 @@ public interface SignUpService {
 	 * @param userId The userId of the user whose profile we wish to retrieve
 	 * @return
 	 */
-	public SpringSocialSecurityProfile getUserProfile(String userId);
+	public SpringSocialProfile getUserProfile(String userId);
 
 }
