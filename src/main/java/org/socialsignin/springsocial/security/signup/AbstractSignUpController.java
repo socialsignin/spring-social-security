@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**
- * Controller for displaying/procesing a sign up form and handling chosen user
+ * Abstract Controller for displaying/procesing a sign up form and handling chosen user
  * id, checking if it already exists.
  * 
  * @author Michael Lavelle

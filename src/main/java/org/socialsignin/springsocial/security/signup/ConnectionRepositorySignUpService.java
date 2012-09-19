@@ -17,6 +17,17 @@ import org.springframework.social.connect.DuplicateConnectionException;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * Abstract SignUpService implementation which provides local sign-up services when a user
+ * creates a local user account using a 3rd party provider
+ * for authentication and selects a local username.
+ * 
+ * This implementation stores local account details such
+ * as userName and displayName in the local ConnectionRepository itself
+ * 
+ * @author Michael Lavelle
+ */
 @Service
 public class ConnectionRepositorySignUpService extends AbstractSignUpService<SpringSocialProfile> {
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 public class SpringSocialSecurityProfileFactory extends
 		AbstractSpringSocialProfileFactory<SpringSocialProfile> {
 
-
 	@Override
 	public SpringSocialProfile instantiate() {
 		return new SpringSocialSecurityProfile();
