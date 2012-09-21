@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
 package org.socialsignin.springsocial.security.signup;
 
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
-import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
-import org.springframework.social.connect.UserProfile;
-import org.springframework.stereotype.Service;
 
 /**
- * A command that signs up a new user in the event no local user id could be
+ * An abstract command that signs up a new user in the event no local user id could be
  * mapped from a Connection.
  * 
  * In SpringSocialSecurity, by default there is no need for a local user account
@@ -32,6 +29,9 @@ import org.springframework.stereotype.Service;
  * user id associated with third party connection.
  * 
  * Returns null if user id already exists locally for a different connection
+ * 
+ * Default implementation is SpringSocialSecurityConnectionSignUp - alternative implementations can
+ * be provided and registered should the implicit SignUp require custom behaviour.
  * 
  * @author Michael Lavelle
  */

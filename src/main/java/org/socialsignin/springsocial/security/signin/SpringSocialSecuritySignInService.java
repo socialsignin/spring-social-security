@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import org.springframework.web.context.request.RequestAttributes;
 @Service
 public class SpringSocialSecuritySignInService implements SignInAdapter {
 
-	public final static String SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME = "org.socialsignin.springframework.social.security.signInDetails";
+	public final static String SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME = "org.socialsignin.springsocial.security.signInDetails";
 
 	public String signIn(String localUserId, Connection<?> connection,
 			NativeWebRequest nativeWebRequest) {

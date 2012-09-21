@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,7 @@
 package org.socialsignin.springsocial.security.api;
 
 /**
- * Represents a local user profile in a spring-social-security application for the typical use-case  
- * where users authenticate using 3rd party providers, simply selecting a local userName and optional displayName on registration
- * (which can be defaulted to those provided by the 3rd party if appropriate). 
- * 
- * In spring-social security applications a user does not need to choose a local password as part of their sign up process as
- * authentication is delegated to 3rd party, however a non-empty local password *is* required if remember-me services are
- * to be used. Implementations of <code>SignUpService</code> can choose whether to give the user an option to pick a password
- * or could auto-generate a password on behalf of the user (the default behavior of <code>ConnectionRepositorySignUpService</code> ).
- * 
- * The imageUrl and profileUrl attributes support the common scenario where spring-social applications create web-accessible
- * profiles on behalf of their users which pull in data from 3rd party providers, but may wish to give their users the
- * opportunity to customise their profile url and image. 
+ * Default implementation of <code>SpringSocialProfile</code>
  * 
  * @author Michael Lavelle
  */

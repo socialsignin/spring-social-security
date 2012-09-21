@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 package org.socialsignin.springsocial.security.signup;
 
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
-import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFilter;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -33,8 +31,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**
- * Abstract Controller for displaying/procesing a sign up form and handling chosen user
- * id, checking if it already exists.
+ * Abstract Controller for displaying/procesing a sign up form and handling chosen username, 
+ * checking if username already exists as a minimum.
+ * 
+ * Default implementation is SpringSocialSecuritySignUpController, however alternative
+ * subclasses can be registered instead to provide for custom sign up behaviour.
+ * 
  * 
  * @author Michael Lavelle
  */

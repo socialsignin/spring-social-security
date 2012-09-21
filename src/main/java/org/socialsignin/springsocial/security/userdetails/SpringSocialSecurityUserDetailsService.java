@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
-import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFactory;
 import org.socialsignin.springsocial.security.signup.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class SpringSocialSecurityUserDetailsService implements
 	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
 	
 	@Autowired
-	private SignUpService signUpService;
+	private SignUpService<?> signUpService;
 	
 	/**
 	 * Uses a <code>SignUpService</code> implementation to check if a local user account for this username is available 
@@ -118,7 +117,7 @@ public class SpringSocialSecurityUserDetailsService implements
 	}
 
 
-	public void setSignUpService(SignUpService signUpService) {
+	public void setSignUpService(SignUpService<?> signUpService) {
 		this.signUpService = signUpService;
 	}
 		

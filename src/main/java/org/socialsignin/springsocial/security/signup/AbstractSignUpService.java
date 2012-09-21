@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,10 @@
  */
 package org.socialsignin.springsocial.security.signup;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
-import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
-import org.socialsignin.springsocial.security.api.SpringSocialSecurityProfile;
-import org.socialsignin.springsocial.security.connect.SpringSocialSecurityConnectionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionData;
-import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.connect.DuplicateConnectionException;
-import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,13 +30,17 @@ import org.springframework.web.context.request.WebRequest;
  * creates a local user account using a 3rd party provider
  * for authentication and selects a local username.
  * 
+ * Default implementation is ConnectionRepositorySignUpService which stores minimal
+ * local use account details inside existing Spring Social Connection Repository.
+ * 
+ * Alternative implementations can be registered instead to support collecting custom
+ * sign up details and/or storing to an alternative persistent store
+ * 
  * @author Michael Lavelle
  */
 @Service
 public abstract class AbstractSignUpService<P extends SpringSocialProfile> implements SignUpService<P> {
 
-
-	
 	protected String generateNewPassword()
 	{
 		// Passwords must be non-null as:
