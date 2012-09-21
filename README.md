@@ -40,8 +40,8 @@ Adding Spring-Social-Security to a Spring-Social web application
 ```
 <repositories>
    <repository>
-	<id>opensourceagility-snapshots</id>
-	<url>http://repo.opensourceagility.com/snapshots</url>
+	<id>opensourceagility-releases</id>
+	<url>http://repo.opensourceagility.com/releases</url>
    </repository>
 </repositories>
 ```
@@ -49,7 +49,7 @@ Adding Spring-Social-Security to a Spring-Social web application
   	<dependency>
 			<groupId>org.socialsignin</groupId>
 			<artifactId>spring-social-security</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.2.RELEASE</version>
 	</dependency>
 ```
 - Component-scan for spring-social-security components in both your application context and in your mvc context
