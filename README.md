@@ -25,8 +25,7 @@ For simple "Hello World" apps demonstrating spring-social-security see:
 
 * https://github.com/socialsignin/socialsignin-showcase ( Using SocialSignin provider modules for auto-registration of providers and API abstraction layer, using default local user account domain model)
 
-* https://github.com/socialsignin/socialsignin-showcase ( Using SocialSignin provider modules for auto-registration of providers and API abstraction layer, using custom local user account domain model )
-
+* https://github.com/michaellavelle/socialsignin-showcase ( Using SocialSignin provider modules for auto-registration of providers and API abstraction layer, using custom local user account domain model )
 
 * https://github.com/socialsignin/socialsignin-roo-showcase ( Roo project with SocialSignin modules and Roo-backed persistence for UserConnections )
 
