@@ -16,6 +16,7 @@
 package org.socialsignin.springsocial.security.signin;
 
 import org.springframework.social.connect.ConnectionData;
+import java.io.Serializable;
 
 /**
  * POJO for holding userid and connectiondata, set in session by
@@ -24,7 +25,7 @@ import org.springframework.social.connect.ConnectionData;
  * 
  * @author Michael Lavelle
  */
-public class SpringSocialSecuritySignInDetails {
+public class SpringSocialSecuritySignInDetails implements Serializable {
 
 	public String getUserId() {
 		return userId;
