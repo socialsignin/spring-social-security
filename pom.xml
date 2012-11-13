@@ -20,7 +20,7 @@
 	<groupId>org.socialsignin</groupId>
 	<artifactId>spring-social-security</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.3.RELEASE</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>SocialSignIn's Spring Social Security</name>
 	<properties>
 		<org.springframework.version>3.1.2.RELEASE</org.springframework.version>

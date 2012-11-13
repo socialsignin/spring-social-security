@@ -136,7 +136,8 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 		{
 			if (requiredProviderIds == null)
 			{
-				boolean providerCombinationAllowsAccess = getPrivilegeEvaluator(request).isAllowed(request.getContextPath(),getUri(request),request.getMethod(), springSocialSecurityAuthenticationFactory.updateAuthenticationForNewProviders(existingAuthentication, additionProviderIdsCombination));
+				boolean providerCombinationAllowsAccess =providerCombinationAllowsAccess(request,
+						existingAuthentication,additionProviderIdsCombination);
 				if (providerCombinationAllowsAccess)
 				{
 					requiredProviderIds = additionProviderIdsCombination;
@@ -168,8 +169,30 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 		return updatedAuthentication;
 	}
 	
+	private boolean providerCombinationAllowsAccess(HttpServletRequest request,
+			Authentication existingAuthentication,
+			Set<String> additionProviderIdsCombination) throws ServletException
+	{
+		for (WebInvocationPrivilegeEvaluator evaluator : getPrivilegeEvaluators(request))
+		{
+			boolean accessGranted = providerCombinationAllowsAccessForEvaluator(request,existingAuthentication,
+					evaluator,additionProviderIdsCombination);
+			if (!accessGranted) return false;
+		}
+		return true;
+	}
 	
-	protected WebInvocationPrivilegeEvaluator getPrivilegeEvaluator(HttpServletRequest request) throws ServletException  {
+	
+	private boolean providerCombinationAllowsAccessForEvaluator(HttpServletRequest request,
+			Authentication existingAuthentication,
+			WebInvocationPrivilegeEvaluator evaluator,
+			Set<String> additionProviderIdsCombination)
+	{
+		return evaluator.isAllowed(request.getContextPath(),getUri(request),request.getMethod(), springSocialSecurityAuthenticationFactory.updateAuthenticationForNewProviders(existingAuthentication, additionProviderIdsCombination));
+		
+	}
+	
+	protected Collection<WebInvocationPrivilegeEvaluator> getPrivilegeEvaluators(HttpServletRequest request) throws ServletException  {
         ServletContext servletContext = request.getSession().getServletContext();
         ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
         Map<String, WebInvocationPrivilegeEvaluator> wipes = ctx.getBeansOfType(WebInvocationPrivilegeEvaluator.class);
@@ -178,8 +201,9 @@ public class SpringSocialSecurityAccessDeniedHandler extends
             throw new ServletException("No visible WebInvocationPrivilegeEvaluator instance could be found in the application " +
                     "context. There must be at least one in order to support the use of URL access checks in this AccessDeniedHandler.");
         }
+       
 
-        return (WebInvocationPrivilegeEvaluator) wipes.values().toArray()[0];
+        return wipes.values();
     }
 
 	public void setRequestCache(RequestCache requestCache) {
