@@ -58,6 +58,10 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 	@Value("${socialsignin.defaultAccessDeniedUrl:/}")
 	private String defaultAccessDeniedUrl;
 	
+	
+	@Value("${socialsignin.connectWithProviderUrlPrefix:/connect}")
+	private String connectWithProviderUrlPrefix;
+	
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory springSocialSecurityAuthenticationFactory;
 	
@@ -88,7 +92,7 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 			AccessDeniedHandlerImpl providerSpecificAccessDeniedHandler
 			 = new AccessDeniedHandlerImpl();
 			request.setAttribute(REQUIRED_PROVIDERS_REQUEST_ATTRIBUTE_NAME, requiredProviderIds);
-			providerSpecificAccessDeniedHandler.setErrorPage("/connect/" + requiredProviderIds.iterator().next());
+			providerSpecificAccessDeniedHandler.setErrorPage(connectWithProviderUrlPrefix + "/" + requiredProviderIds.iterator().next());
 			providerSpecificAccessDeniedHandler.handle(request, response, accessDeniedException);
 		}
 		else
