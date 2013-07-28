@@ -1,0 +1,2 @@
+http\://www.springframework.org/schema/social/spring-social-springsocialsecurity.xsd=org/socialsignin/springsocial/security/config/xml/spring-social-springsocialsecurity-1.1.xsd
+http\://www.springframework.org/schema/social/spring-social-springsocialsecurity-1.1.xsd=org/socialsignin/springsocial/security/config/xml/spring-social-springsocialsecurity-1.1.xsd

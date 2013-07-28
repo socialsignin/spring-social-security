@@ -39,6 +39,7 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -69,7 +70,7 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 	private UserAuthoritiesService userAuthoritiesService;
 	
 	@Autowired
-	private ConnectionFactoryRegistry connectionFactoryRegistry;
+	private ConnectionFactoryLocator connectionFactoryLocator;
 	
 
 	private RequestCache requestCache = new HttpSessionRequestCache();
@@ -120,7 +121,7 @@ public class SpringSocialSecurityAccessDeniedHandler extends
 	{
 		Authentication existingAuthentication = SecurityContextHolder.getContext().getAuthentication();
 		Set<String> unconnectedProviders = new HashSet<String>();
-		for (String registeredProviderId : connectionFactoryRegistry.registeredProviderIds())
+		for (String registeredProviderId : connectionFactoryLocator.registeredProviderIds())
 		{
 			GrantedAuthority providerAuthority = userAuthoritiesService.getProviderAuthority(registeredProviderId);
 			if (existingAuthentication == null || !existingAuthentication.getAuthorities().contains(providerAuthority))
