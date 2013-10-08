@@ -68,7 +68,7 @@ public class SpringSocialSecurityAuthenticationFactory {
 			Authentication existingAuthentication, String providerId) {
 		return createNewAuthentication(
 				existingAuthentication.getName(),
-				existingAuthentication.getCredentials().toString(),
+				existingAuthentication.getCredentials() == null ? null : existingAuthentication.getCredentials().toString(),
 				addAuthority(existingAuthentication, userAuthoritiesService
 						.getProviderAuthority(providerId)));
 	}

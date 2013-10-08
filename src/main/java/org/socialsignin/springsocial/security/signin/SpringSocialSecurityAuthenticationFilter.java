@@ -35,6 +35,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.social.UserIdSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -57,7 +58,8 @@ public class SpringSocialSecurityAuthenticationFilter extends
 	@Value("${socialsignin.defaultAuthenticationSuccessUrl:}")
 	private String defaultAuthenticationSuccessUrl;
 	
-
+	@Autowired
+	private UserIdSource userIdSource;
 	
 	public final static String DEFAULT_AUTHENTICATION_URL = "/authenticate";
 	
@@ -125,8 +127,15 @@ public class SpringSocialSecurityAuthenticationFilter extends
 				.getSession()
 				.getAttribute(
 						SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
-		String alreadyAuthenticatedUserId = AuthenticatedUserIdHolder
-				.getAuthenticatedUserId();
+		String alreadyAuthenticatedUserId = null;
+		try
+		{
+			alreadyAuthenticatedUserId = userIdSource.getUserId();
+		}
+		catch (IllegalStateException e)
+		{
+			// This indicates there is no user currently signed in which is the default for this filter
+		}
 
 		if (signInDetails != null) {
 			UserDetails user = userDetailsService

@@ -15,6 +15,13 @@
  */
 package org.socialsignin.springsocial.security.signin;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.stereotype.Service;
@@ -37,12 +44,35 @@ public class SpringSocialSecuritySignInService implements SignInAdapter {
 
 	public final static String SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME = "org.socialsignin.springsocial.security.signInDetails";
 
+	
+	@Value("${socialsignin.useSocialAuthenticationFilter:false}")
+	private boolean useSocialAuthenticationFilter;
+
+	@Autowired
+	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
+	
+	@Autowired
+	@Qualifier("springSocialSecurityUserDetailsService")
+	private UserDetailsService userDetailsService;
+	
+	
 	public String signIn(String localUserId, Connection<?> connection,
 			NativeWebRequest nativeWebRequest) {
 
-		nativeWebRequest.setAttribute(SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME,
-				new SpringSocialSecuritySignInDetails(localUserId, connection.createData()),
-				RequestAttributes.SCOPE_SESSION);
-		return null;
+		
+		if (useSocialAuthenticationFilter)
+		{
+			UserDetails userDetails = userDetailsService.loadUserByUsername(localUserId);
+			Authentication authentication = authenticationFactory.createAuthenticationFromUserDetails(userDetails);
+			SecurityContextHolder.getContext().setAuthentication(authentication);	
+			return localUserId;
+		}
+		else
+		{
+			nativeWebRequest.setAttribute(SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME,
+			new SpringSocialSecuritySignInDetails(localUserId, connection.createData()),
+			RequestAttributes.SCOPE_SESSION);
+			return null;
+		}
 	}
 }

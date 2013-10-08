@@ -22,8 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Convenience helper class for obtaining a user id if available from 
  * security context.
  * 
+ * Deprecated - use UserIdSource instead
+ * 
  * @author Michael Lavelle
  */
+@Deprecated
 public class AuthenticatedUserIdHolder {
 
 	/**

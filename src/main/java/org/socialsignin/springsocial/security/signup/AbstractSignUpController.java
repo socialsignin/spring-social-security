@@ -53,7 +53,16 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 	@Autowired
 	private F socialProfileFactory;
 	
-	private String authenticateUrl = SpringSocialSecurityAuthenticationFilter.DEFAULT_AUTHENTICATION_URL;
+	
+	@Value("${socialsignin.useSocialAuthenticationFilter:false}")
+	private boolean useSocialAuthenticationFilter;
+	
+	
+	@Value("${socialsignin.authenticationUrl:" + SpringSocialSecurityAuthenticationFilter.DEFAULT_AUTHENTICATION_URL + "}")
+	private String authenticateUrl;
+	
+	
+	//private String authenticateUrl = SpringSocialSecurityAuthenticationFilter.DEFAULT_AUTHENTICATION_URL;
 
 	public void setAuthenticateUrl(String authenticateUrl) {
 		this.authenticateUrl = authenticateUrl;
@@ -147,7 +156,14 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 			return signUpView;
 		}
 		springSocialSecuritySignInService.signIn(userId, connection, request);
-		return "redirect:" + authenticateUrl;
+		if (useSocialAuthenticationFilter)
+		{
+			return "redirect:/";
+		}
+		else
+		{
+			return "redirect:" + authenticateUrl;
+		}
 
 	}
 

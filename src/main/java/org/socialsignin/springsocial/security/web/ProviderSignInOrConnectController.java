@@ -15,7 +15,8 @@
  */
 package org.socialsignin.springsocial.security.web;
 
-import org.socialsignin.springsocial.security.signin.AuthenticatedUserIdHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.web.ProviderSignInAttempt;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.connect.web.SignInAdapter;
@@ -48,11 +49,25 @@ public class ProviderSignInOrConnectController {
 
 	private String signInPath = "/signin";
 	private String connectPath = "/connect";
+	
+	@Autowired
+	private UserIdSource userIdSource;
+	
+	
+	protected boolean isUserSignedIn()
+	{
+		try
+		{
+			return userIdSource.getUserId() != null;
+		}
+		catch (IllegalStateException e)
+		{
+			return false;
+		}
+	}
 
 	protected String getRedirectPath() {
-		String currentUserId = AuthenticatedUserIdHolder
-				.getAuthenticatedUserId();
-		return (currentUserId == null) ? signInPath : connectPath;
+		return  !isUserSignedIn() ? signInPath : connectPath;
 	}
 
 	public void setSignInPath(String signInPath) {
