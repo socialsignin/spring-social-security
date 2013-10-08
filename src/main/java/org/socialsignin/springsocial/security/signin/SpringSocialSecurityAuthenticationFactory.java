@@ -82,7 +82,7 @@ public class SpringSocialSecurityAuthenticationFactory {
 		}
 		return createNewAuthentication(
 				existingAuthentication.getName(),
-				existingAuthentication.getCredentials().toString(),
+				existingAuthentication.getCredentials() == null ? null : existingAuthentication.getCredentials().toString(),
 				addAuthorities(existingAuthentication, newAuthorities));
 	}
 	
@@ -90,7 +90,7 @@ public class SpringSocialSecurityAuthenticationFactory {
 			Authentication existingAuthentication, Connection<?> connection) {
 		return createNewAuthentication(
 				existingAuthentication.getName(),
-				existingAuthentication.getCredentials().toString(),
+				existingAuthentication.getCredentials() == null ? null : existingAuthentication.getCredentials().toString(),
 				addAuthority(existingAuthentication, userAuthoritiesService
 						.getProviderAuthority(connection.getKey())));
 	}

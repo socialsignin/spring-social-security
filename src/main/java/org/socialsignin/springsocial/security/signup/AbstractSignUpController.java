@@ -20,6 +20,9 @@ import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthent
 import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**
@@ -52,6 +56,9 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 	
 	@Autowired
 	private F socialProfileFactory;
+	
+
+	private RequestCache requestCache = new HttpSessionRequestCache();
 	
 	
 	@Value("${socialsignin.useSocialAuthenticationFilter:false}")
@@ -158,6 +165,17 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 		springSocialSecuritySignInService.signIn(userId, connection, request);
 		if (useSocialAuthenticationFilter)
 		{
+			// Attempt to determine the original requested url if access was originally denied
+			SavedRequest savedRequest = requestCache.getRequest(request.getRequest(), request.getResponse());
+			if (savedRequest != null)
+			{
+				String redirectUrl = savedRequest.getRedirectUrl();
+				if (redirectUrl != null && savedRequest.getMethod().equalsIgnoreCase("get"))
+				{
+					return "redirect:" + redirectUrl;
+				}
+			}
+			
 			return "redirect:/";
 		}
 		else
@@ -165,6 +183,18 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 			return "redirect:" + authenticateUrl;
 		}
 
+	}
+	
+	/**
+	 * Set a request cache here to change the default 
+	 * <code>HttpSessionRequestCache</code> used by this class
+	 * to determine if a saved request was set previously
+	 * by an access denied handler.
+	 * 
+	 * @param requestCache
+	 */
+	public void setRequestCache(RequestCache requestCache) {
+		this.requestCache = requestCache;
 	}
 
 }
