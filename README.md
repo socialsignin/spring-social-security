@@ -31,6 +31,9 @@ For simple "Hello World" apps demonstrating spring-social-security see:
 
 Also see <a href="http://socialsignin.org/spring-social-security/docs/1.0.2.RELEASE/api/">JavaDoc for Spring Social Security</a> for API docs.
 
+[![endorse](https://api.coderwall.com/michaellavelle/endorsecount.png)](https://coderwall.com/michaellavelle)
+
+
 Spring-Social-Security Quickstart
 =================================
 
