@@ -18,6 +18,7 @@ package org.socialsignin.springsocial.security.config.annotation;
 import java.util.Map;
 
 import org.socialsignin.springsocial.security.SpringSocialSecurityAuthenticationService;
+import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
 import org.socialsignin.springsocial.security.config.support.SpringSocialSecurityApiHelper;
 import org.socialsignin.springsocial.security.connect.SpringSocialSecurityConnectionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;

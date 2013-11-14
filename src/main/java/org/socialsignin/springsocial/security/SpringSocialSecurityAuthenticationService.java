@@ -20,13 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
 import org.socialsignin.springsocial.security.connect.SpringSocialSecurityConnectionFactory;
-import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.security.SocialAuthenticationRedirectException;
 import org.springframework.social.security.SocialAuthenticationToken;
 import org.springframework.social.security.provider.AbstractSocialAuthenticationService;
-import org.springframework.social.security.provider.OAuth2AuthenticationService;
-import org.springframework.social.security.provider.SocialAuthenticationService;
 import org.springframework.util.Assert;
 
 /**

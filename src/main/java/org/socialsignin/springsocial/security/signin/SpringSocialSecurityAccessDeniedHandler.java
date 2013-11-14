@@ -40,7 +40,6 @@ import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 

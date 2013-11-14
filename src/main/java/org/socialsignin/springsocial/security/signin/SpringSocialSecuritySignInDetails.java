@@ -15,8 +15,9 @@
  */
 package org.socialsignin.springsocial.security.signin;
 
-import org.springframework.social.connect.ConnectionData;
 import java.io.Serializable;
+
+import org.springframework.social.connect.ConnectionData;
 
 /**
  * POJO for holding userid and connectiondata, set in session by
