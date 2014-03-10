@@ -28,5 +28,4 @@ import org.springframework.stereotype.Service;
 public class SpringSocialSecurityConnectionSignUp extends
 		AbstractSpringSocialSecurityConnectionSignUp<
 		SpringSocialProfile, SpringSocialSecuritySignUpService,SpringSocialSecurityProfileFactory> {
-	
 }

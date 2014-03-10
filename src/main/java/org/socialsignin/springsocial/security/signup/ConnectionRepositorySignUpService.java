@@ -43,8 +43,8 @@ import org.springframework.stereotype.Service;
  * @author Michael Lavelle
  */
 @Service
-public class ConnectionRepositorySignUpService extends AbstractSignUpService<SpringSocialProfile> {
-
+public class ConnectionRepositorySignUpService extends AbstractSignUpService<SpringSocialProfile> implements SpringSocialSecuritySignUpService {
+	
 	@Autowired
 	private UsersConnectionRepository usersConnectionRepository;
 

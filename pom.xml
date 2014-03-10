@@ -17,9 +17,9 @@
 	<name>SocialSignIn's Spring Social Security</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>3.2.3.RELEASE</org.springframework.version>
-		<org.springframework.social.version>1.1.0.M3</org.springframework.social.version>
-		<org.springframework.security.version>3.2.0.M2</org.springframework.security.version>
+		<org.springframework.version>4.0.2.RELEASE</org.springframework.version>
+		<org.springframework.social.version>1.1.0.RC1</org.springframework.social.version>
+		<org.springframework.security.version>3.2.0.RELEASE</org.springframework.security.version>
 	</properties>
 	<distributionManagement>
 		<repository>
@@ -47,6 +47,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+				<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>

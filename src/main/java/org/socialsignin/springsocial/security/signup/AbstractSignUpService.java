@@ -18,8 +18,12 @@ package org.socialsignin.springsocial.security.signup;
 import java.util.UUID;
 
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +44,21 @@ import org.springframework.web.context.request.WebRequest;
  */
 @Service
 public abstract class AbstractSignUpService<P extends SpringSocialProfile> implements SignUpService<P> {
+
+	
+	@Autowired(required=false)
+	private SessionStrategy sessionStrategy;
+	
+	@Autowired
+	private ConnectionFactoryLocator connectionFactoryLocator;
+	
+	@Autowired
+	private UsersConnectionRepository usersConnectionRepository;
+	
+	
+	public void setSessionStrategy(SessionStrategy sessionStrategy) {
+		this.sessionStrategy = sessionStrategy;
+	}
 
 	protected String generateNewPassword()
 	{
@@ -81,7 +100,7 @@ public abstract class AbstractSignUpService<P extends SpringSocialProfile> imple
 			P springSocialProfile,
 			WebRequest webRequest) throws UsernameAlreadyExistsException {
 		signUpUser(springSocialProfile);
-		ProviderSignInUtils.handlePostSignUp(springSocialProfile.getUserName(), webRequest);
+		getProviderSignInUtils().doPostSignUp(springSocialProfile.getUserName(), webRequest);
 	}
 
 	@Override
@@ -93,6 +112,9 @@ public abstract class AbstractSignUpService<P extends SpringSocialProfile> imple
 	@Transactional(readOnly = true)
 	public abstract P getUserProfile(String userId) throws UsernameNotFoundException;
 
-	
+	private ProviderSignInUtils getProviderSignInUtils()
+	{
+		return sessionStrategy == null ? new ProviderSignInUtils() : new ProviderSignInUtils(sessionStrategy); 
+	}
 
 }

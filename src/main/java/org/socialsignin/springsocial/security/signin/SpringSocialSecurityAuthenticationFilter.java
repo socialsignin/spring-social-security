@@ -36,7 +36,10 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.social.UserIdSource;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.ServletWebRequest;
 
 /**
  * Processes an SpringSocialSecurity authentication request. Checks for session
@@ -60,6 +63,9 @@ public class SpringSocialSecurityAuthenticationFilter extends
 	
 	@Autowired
 	private UserIdSource userIdSource;
+	
+	@Autowired(required=false)
+	private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 	
 	public final static String DEFAULT_AUTHENTICATION_URL = "/authenticate";
 	
@@ -122,11 +128,12 @@ public class SpringSocialSecurityAuthenticationFilter extends
 			IOException, ServletException {
 
 
-		
-		SpringSocialSecuritySignInDetails signInDetails = (SpringSocialSecuritySignInDetails) request
-				.getSession()
-				.getAttribute(
-						SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
+		ServletWebRequest r = new ServletWebRequest(request);
+		SpringSocialSecuritySignInDetails signInDetails = (SpringSocialSecuritySignInDetails)sessionStrategy.getAttribute(r, SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
+		//SpringSocialSecuritySignInDetails signInDetails = (SpringSocialSecuritySignInDetails) request
+			//	.getSession()
+			//	.getAttribute(
+				//		SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
 		String alreadyAuthenticatedUserId = null;
 		try
 		{
@@ -141,9 +148,10 @@ public class SpringSocialSecurityAuthenticationFilter extends
 			UserDetails user = userDetailsService
 					.loadUserByUsername(signInDetails.getUserId());
 			if (removeSignInDetailsFromSessionOnSuccessfulAuthentication) {
-				request.getSession()
-						.removeAttribute(
-								SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
+				sessionStrategy.removeAttribute(r, SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
+				//request.getSession()
+					//	.removeAttribute(
+						//		SpringSocialSecuritySignInService.SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME);
 			}
 			return authenticationFactory
 					.createAuthenticationFromUserDetails(user);

@@ -16,10 +16,10 @@
 package org.socialsignin.springsocial.security.connect;
 
 import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
-import org.socialsignin.springsocial.security.connect.support.SpringSocialSecurityConnection;
+import org.socialsignin.springsocial.security.connect.support.SpringSocialSecurityOAuth2Connection;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
-import org.springframework.social.connect.ConnectionFactory;
+import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 
 /**
  * SpringSocialSecurity ConnectionFactory implementation
@@ -27,22 +27,18 @@ import org.springframework.social.connect.ConnectionFactory;
  * @author Michael Lavelle
  */
 public class SpringSocialSecurityConnectionFactory extends
-		ConnectionFactory<SpringSocialSecurity> {
+		OAuth2ConnectionFactory<SpringSocialSecurity> {
 
 	public final static String SPRING_SOCIAL_SECURITY_PROVIDER_NAME = "springSocialSecurity";
+
 	
 	public SpringSocialSecurityConnectionFactory() {
-		super(SPRING_SOCIAL_SECURITY_PROVIDER_NAME,
-				new SpringSocialSecurityServiceProvider(),
-				new SpringSocialSecurityAdapter());
+		super(SPRING_SOCIAL_SECURITY_PROVIDER_NAME, new SpringSocialSecurityServiceProvider(), new SpringSocialSecurityAdapter());
 	}
+
 
 	@Override
 	public Connection<SpringSocialSecurity> createConnection(ConnectionData data) {
-		return new SpringSocialSecurityConnection(
-				(SpringSocialSecurityServiceProvider) getServiceProvider(),
-				data, getApiAdapter());
-
+		return new SpringSocialSecurityOAuth2Connection(data,(SpringSocialSecurityServiceProvider) getServiceProvider(),getApiAdapter());
 	}
-
 }

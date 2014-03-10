@@ -17,8 +17,8 @@ package org.socialsignin.springsocial.security.connect;
 
 import org.socialsignin.springsocial.security.api.SpringSocialSecurity;
 import org.socialsignin.springsocial.security.api.impl.SpringSocialSecurityTemplate;
-import org.springframework.social.ServiceProvider;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 
 /**
  * SpringSocialSecurity ServiceProvider implementation
@@ -26,12 +26,23 @@ import org.springframework.social.connect.ConnectionData;
  * 
  * @author Michael Lavelle
  */
-public class SpringSocialSecurityServiceProvider implements
-		ServiceProvider<SpringSocialSecurity> {
+public class SpringSocialSecurityServiceProvider extends AbstractOAuth2ServiceProvider<SpringSocialSecurity>
+{
+
+	public SpringSocialSecurityServiceProvider() {
+		super(null);
+	}
+	
 
 	public SpringSocialSecurity getSpringSocialSecurity(
 			ConnectionData connectionData) {
 		return new SpringSocialSecurityTemplate(connectionData);
+	}
+
+	@Override
+	public SpringSocialSecurity getApi(String accessToken) {
+		// API is not retrieved using access token - use getSpringSocialSecurity() method instead
+		return null;
 	}
 
 }

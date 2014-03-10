@@ -23,10 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
 
 /**
  * Adapter that bridges between a ProviderSignInController and a
@@ -51,6 +52,9 @@ public class SpringSocialSecuritySignInService implements SignInAdapter {
 	@Autowired
 	private SpringSocialSecurityAuthenticationFactory authenticationFactory;
 	
+	@Autowired(required=false)
+	private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
 	@Autowired
 	@Qualifier("springSocialSecurityUserDetailsService")
 	private UserDetailsService userDetailsService;
@@ -69,10 +73,13 @@ public class SpringSocialSecuritySignInService implements SignInAdapter {
 		}
 		else
 		{
-			nativeWebRequest.setAttribute(SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME,
-			new SpringSocialSecuritySignInDetails(localUserId, connection.createData()),
-			RequestAttributes.SCOPE_SESSION);
+			sessionStrategy.setAttribute(nativeWebRequest,SIGN_IN_DETAILS_SESSION_ATTRIBUTE_NAME, new SpringSocialSecuritySignInDetails(localUserId, connection.createData()));
 			return null;
 		}
 	}
+	
+	public void setSessionStrategy(SessionStrategy sessionStrategy) {
+		this.sessionStrategy = sessionStrategy;
+	}
+
 }

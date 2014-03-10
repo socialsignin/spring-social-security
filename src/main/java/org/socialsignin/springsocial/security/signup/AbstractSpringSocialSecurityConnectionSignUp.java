@@ -52,8 +52,11 @@ P extends SpringSocialProfile,S extends SignUpService<P>,F extends AbstractSprin
 		{
 			P springSocialSecurityProfile = 
 				socialProfileFactory.create(connection);
-			signUpService
+			if (springSocialSecurityProfile.getUserName() != null)
+			{
+				signUpService
 				.signUpUser(springSocialSecurityProfile);
+			}
 			return springSocialSecurityProfile.getUserName();
 		}
 		catch (UsernameAlreadyExistsException e)

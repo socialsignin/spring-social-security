@@ -24,7 +24,10 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -56,7 +59,16 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 	@Autowired
 	private F socialProfileFactory;
 	
-
+	@Autowired(required=false)
+	private SessionStrategy sessionStrategy;
+	
+	@Autowired
+	private ConnectionFactoryLocator connectionFactoryLocator;
+	
+	@Autowired
+	private UsersConnectionRepository usersConnectionRepository;
+	
+	
 	private RequestCache requestCache = new HttpSessionRequestCache();
 	
 	
@@ -68,8 +80,6 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 	private String authenticateUrl;
 	
 	
-	//private String authenticateUrl = SpringSocialSecurityAuthenticationFilter.DEFAULT_AUTHENTICATION_URL;
-
 	public void setAuthenticateUrl(String authenticateUrl) {
 		this.authenticateUrl = authenticateUrl;
 	}
@@ -86,10 +96,14 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 		return signUpView;
 	}
 	
+	private ProviderSignInUtils getProviderSignInUtils()
+	{
+		return sessionStrategy == null ? new ProviderSignInUtils() : new ProviderSignInUtils(sessionStrategy); 
+	}
 
 	@ModelAttribute("signUpForm")
 	public P createForm(ServletWebRequest request) {
-		Connection<?> connection = ProviderSignInUtils.getConnection(request);
+		Connection<?> connection = getProviderSignInUtils().getConnectionFromSession(request);
 		if (connection != null) {
 			P signUpForm = socialProfileFactory.create(connection);
 			String thirdPartyUserName = signUpForm.getUserName();
@@ -155,7 +169,7 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 			ServletWebRequest request,
 			@ModelAttribute("signUpForm") P signUpForm,
 			BindingResult result) {
-		Connection<?> connection = ProviderSignInUtils.getConnection(request);
+		Connection<?> connection =getProviderSignInUtils().getConnectionFromSession(request);
 
 		String userId = signUpUser(request, signUpForm, result);
 		if (result.hasErrors() || userId == null) {
@@ -195,5 +209,8 @@ F extends AbstractSpringSocialProfileFactory<P>> {
 	public void setRequestCache(RequestCache requestCache) {
 		this.requestCache = requestCache;
 	}
+	
+	
+	
 
 }
