@@ -58,7 +58,8 @@ public class ProviderSignInOrConnectController {
 	{
 		try
 		{
-			return userIdSource.getUserId() != null;
+			String userId = userIdSource.getUserId();
+			return userId != null && !"anonymousUser".equals(userId);
 		}
 		catch (IllegalStateException e)
 		{
