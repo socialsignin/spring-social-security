@@ -19,7 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.version>4.0.2.RELEASE</org.springframework.version>
 		<org.springframework.social.version>1.1.0.RC1</org.springframework.social.version>
-		<org.springframework.security.version>3.2.0.RELEASE</org.springframework.security.version>
+		<org.springframework.security.version>5.2.10.RELEASE</org.springframework.security.version>
 	</properties>
 	<distributionManagement>
 		<repository>
